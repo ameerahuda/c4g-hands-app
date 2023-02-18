@@ -1,0 +1,28 @@
+{
+    "name": "HandS Dashboard",
+    "short_name": "HandS",
+    "scope": "/",
+    "start_url": "/",
+    "theme_color": "#000000",
+    "background_color": "#FFFFFF",
+    "display": "fullscreen",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "icons/icon404.png",
+            "sizes": "404x407",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+  }
