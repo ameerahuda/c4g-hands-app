@@ -11,7 +11,7 @@ export default function Home() {
 			</Head>
 			<main className={styles.main}>
 				<div className={styles.bgImgContainer}>
-					<img src="/images/united_way_staff.png" height={100} width={100} className={styles.bgImg} />
+					<img src="/images/united_way_staff.png" height={100} width={100} className={styles.bgImg} alt="United Way Staff" />
 				</div>
 				<div className={styles.title}>
 					Housing and Savings Dashboard
