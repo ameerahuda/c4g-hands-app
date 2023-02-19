@@ -1,5 +1,5 @@
 {
-    "name": "HandS Dashboard",
+    "name": "HandS Dashboard PWA",
     "short_name": "HandS",
     "scope": "/",
     "start_url": "/",
@@ -7,10 +7,26 @@
     "background_color": "#FFFFFF",
     "display": "fullscreen",
     "orientation": "portrait",
+    "prefer_related_applications": true,
     "icons": [
         {
-            "src": "icons/icon404.png",
-            "sizes": "404x407",
+            "src": "icons/icon16.png",
+            "sizes": "16x16",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon64.png",
+            "sizes": "64x64",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon128.png",
+            "sizes": "128x128",
             "type": "image/png"
         },
         {
@@ -19,10 +35,15 @@
             "type": "image/png"
         },
         {
+            "src": "icons/icon256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
             "src": "icons/icon512.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "maskable"
         }
     ]
   }
