@@ -4,6 +4,7 @@
   --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
     'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
     'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+  --font-family: 'Montserrat', sans-serif;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -38,6 +39,12 @@
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
+
+
+  /* colors */
+  --white: #FFFFFF;
+  --light-blue: #3792cb;
+  --grey: #CCCCCC;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -87,12 +94,7 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: var(--white);
 }
 
 a {
