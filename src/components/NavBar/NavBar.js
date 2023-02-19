@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 
 import styles from '@/styles/NavBar.module.css'
 
 export default function NavBar() {
-    const [active, setActive] = useState();
+    const { pathname } = useRouter();
+    const [active, setActive] = useState(pathname);
     const [hamburgerMenu, setHamburgerMenu] = useState(false);
 
     return (
         <header className={styles.navbar}>
-            <Image
-                src="/icons/icon192.png"
-                alt="United Way Logo"
-                width={70}
-                height={70}
-                priority
-            />
+            <Link href="/" onClick={() => {setActive('/'); setHamburgerMenu(false)}}>
+                <Image
+                    src="/icons/icon192.png"
+                    alt="United Way Logo"
+                    width={70}
+                    height={70}
+                    priority
+                />
+            </Link>
             <ul className={`${styles.navMenu} ${hamburgerMenu && styles.hamburgerMenuActive}`}>
                 <li className={`${styles.navItem} ${active === '/' && styles.active}`}>
                     <Link href="/" onClick={() => {setActive('/'); setHamburgerMenu(false)}}>Home</Link>

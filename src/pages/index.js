@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
+import Image from 'next/image';
 
 export default function Home() {
   	return (
@@ -9,7 +10,9 @@ export default function Home() {
 				<meta name="description" content="HandS Dashboard" />
 			</Head>
 			<main className={styles.main}>
-				<div className={styles.bgImgContainer}><img src="/images/united_way_staff.png" className={styles.bgImg}></img></div>
+				<div className={styles.bgImgContainer}>
+					<img src="/images/united_way_staff.png" height={100} width={100} className={styles.bgImg} />
+				</div>
 				<div className={styles.title}>
 					Housing and Savings Dashboard
 				</div>
@@ -17,17 +20,38 @@ export default function Home() {
 					<span className={styles.infoSection}>
 						<p className={styles.infoTitle}>What We Do</p>
 						<p className={styles.infoSubtitle}>United Way of Greater Atlanta connects teams of people, companies, nonprofit partners, government agencies, and community groups to work together to identify and break down barriers within the community through program development, strategic investments and community service.</p>
-						<img src="/images/community.png" className={styles.infoImg}></img>
+						<Image
+							src="/images/community.png"
+							alt="What We Do"
+							width={100}
+							height={100}
+							priority
+							className={styles.infoImg}
+						/>
 					</span>
 					<span className={styles.infoSection}>
 						<p className={styles.infoTitle}>Our Mission</p>
 						<p className={styles.infoSubtitle}>To bring together people and resources to drive sustainable and equitable improvements in the well-being of half a million lives across Greater Atlanta.</p>
-						<img src="/images/improvements.png" className={styles.infoImg}></img>
+						<Image
+							src="/images/improvements.png"
+							alt="Our Mission"
+							width={100}
+							height={100}
+							priority
+							className={styles.infoImg}
+						/>
 					</span>
 					<span className={styles.infoSection}>
 						<p className={styles.infoTitle}>Join the Movement</p>
 						<p className={styles.infoSubtitle}>Change sparks when people of different strengths come together for a united cause. To transform more lives of children and families across Greater Atlanta, we provide a platform to give, advocate and volunteer — united.</p>
-						<img src="/images/hands_together.png" className={styles.infoImg}></img>
+						<Image
+							src="/images/hands_together.png"
+							alt="Join the Movement"
+							width={100}
+							height={100}
+							priority
+							className={styles.infoImg}
+						/>
 					</span>
 				</div>
 			</main>
