@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import styles from '@/styles/SignIn.module.css';
+import Image from 'next/image';
 
 export default function Signin() {
   return (
@@ -12,7 +13,13 @@ export default function Signin() {
       </Head>
       <main className={styles.main}>
         <div className={styles.signin}></div>
-        <img src="/images/under_construction.png" className={styles.img}></img>
+        <Image
+            src="/images/under_construction.png"
+            alt="Page in Progress"
+            width={150}
+            height={150}
+            priority
+        />
         <p>Page in Progress</p>
       </main>
     </>
