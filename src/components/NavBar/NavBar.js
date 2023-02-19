@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -8,13 +8,6 @@ export default function NavBar() {
     const [active, setActive] = useState();
     const [hamburgerMenu, setHamburgerMenu] = useState(false);
 
-    useEffect(() => {
-        console.log('active', active)
-    }, [active])
-
-    useEffect(() => {
-        console.log('hamburgerMenu', hamburgerMenu)
-    }, [hamburgerMenu])
     return (
         <header className={styles.navbar}>
             <Image
