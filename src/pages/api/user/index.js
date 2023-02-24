@@ -1,14 +1,8 @@
-import { pool } from "database/pool";
+import getHandler from "@/backend/handler";
+import CustomError from "@/backend/error/CustomError";
 
-export default async function handler(req, res) {
-    return res.status(400).send("Method not allowed");
-}
-
-const queryUserByName = async (name) => {
-    console.log("queryUserByName " + name)
-    const user = await pool.query("SELECT * FROM user where name = ?",
-        [name]);
-    return user;
-};
-
-export {queryUserByName}
+export default getHandler().get(async (req, res) => {
+    console.log(req.userId)
+    console.log(req.username)
+    throw new CustomError('Notfound', 404);
+});
