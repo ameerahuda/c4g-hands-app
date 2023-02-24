@@ -7,30 +7,39 @@
 }
 
 .bgImgContainer {
-  background-color: var(--grey);
+  background-color: #063b76;
   height: 50rem;
   margin-bottom: 1rem;
   width: 100%;
 }
 
 .bgImg {
-  opacity: 0.4;
+  opacity: 0.2;
   height: 50rem;
   width: 100%;
   object-fit: cover;
 }
 
-.title {
+.header {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: var(--font-family);
-  font-size: 5rem;
   text-align: center;
-  text-transform: uppercase;
   color: var(--white);
-  font-weight: 100;
+  font-weight: 300;
+  width: 100%;
+}
+
+.title {
+  text-transform: uppercase;
+  font-size: 3.5rem;
+  font-weight: 300;
+}
+
+.subtitle {
+
 }
 
 .info {

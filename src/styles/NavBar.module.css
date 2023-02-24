@@ -12,6 +12,16 @@
     z-index: 1;
 }
 
+.logoLink {
+    display: inline-flex;
+    align-items: center;
+}
+
+.logoLink p {
+    margin-left: 1rem;
+    font-weight: 600;
+}
+
 .navMenu {
     display: inline-flex;
     list-style-type: none;
@@ -19,7 +29,7 @@
 }
 
 .navItem {
-    margin-right: 2.5rem;
+    margin-right: 1.5rem;
     padding-bottom: 0.5rem;
     text-transform: uppercase;
     font-weight: 100;
@@ -28,6 +38,25 @@
 .active {
     color: var(--light-blue);
     font-weight: 600;
+}
+
+.link {
+    display: inline-block;
+    text-decoration: none;
+}
+  
+.link::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 1px;
+    background: #fd9542;
+    transition: width .4s ease-in;
+    color: var(--light-blue);
+}
+  
+ .link:hover::after {
+    width: 100%;
 }
 
 .hamburger {
@@ -81,5 +110,9 @@
 
     .hamburger.hamburgerMenuActive .bar:nth-child(3) {
         transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .logoLink p {
+        display: none;
     }
 }

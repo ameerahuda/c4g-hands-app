@@ -13,8 +13,9 @@ export default function Home() {
 				<div className={styles.bgImgContainer}>
 					<img src="/images/united_way_staff.png" height={100} width={100} className={styles.bgImg} alt="United Way Staff" />
 				</div>
-				<div className={styles.title}>
-					Housing and Savings Dashboard
+				<div className={styles.header}>
+					<p className={styles.title}>Helping Families</p>
+					<p className={styles.subtitle}>Communities thrive together</p>
 				</div>
 				<div className={styles.info}>
 					<span className={styles.infoSection}>
