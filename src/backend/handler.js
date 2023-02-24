@@ -1,6 +1,7 @@
 import { verify } from 'jsonwebtoken';
 import nextConnect from 'next-connect';
 import CustomError from "@/backend/error/CustomError";
+import {decodeJWT} from "@/backend/service/user";
 
 export default function getHandler() {
     return nextConnect({
@@ -30,18 +31,16 @@ export default function getHandler() {
                 throw new CustomError("Missing authorization token", 403)
             }
         } else {
-            verify(authorization.slice(7), 'secret', (error, decoded) => {
+            const decoded = decodeJWT(authorization);
 
-                if (error) {
-                    console.error(error)
-                    throw new CustomError(error, 401)
-                }
-
-                if (decoded) {
-                    req.username = decoded.username;
-                }
+            if (decoded) {
+                req.userId = decoded.userId;
+                req.username = decoded.username;
+                req.role = decoded.role;
 
                 next();
-            });
+            } else {
+                throw new CustomError("Invalid token", 401)
+            }
         }
     })};

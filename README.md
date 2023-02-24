@@ -12,6 +12,19 @@ yarn dev
 pnpm dev
 ```
 
+To run it locally, you have to config a .env file under the project folder, which should contain environment variables below:
+```
+DB_HOST=xxxxx
+DB_USER=xxxxx
+DB_USER=xxxxx
+DB_PWD=xxxxx
+DB_PORT=xxxx
+DB_NAME=xxxx
+API_SECRET=xxxxxx
+API_SALT=xxxxx
+```
+We also need to configure these variables on Vercel before deploy.
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.

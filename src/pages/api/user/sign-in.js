@@ -1,8 +1,6 @@
-import { sign } from 'jsonwebtoken';
 import getHandler from "@/backend/handler";
 import CustomError from "@/backend/error/CustomError";
-import {queryUserByName} from "@/backend/service/user";
-import saltedMd5 from "salted-md5";
+import {hashPassword, queryUserByName, signJWT} from "@/backend/service/user";
 
 const handler = getHandler();
 
@@ -12,12 +10,9 @@ handler.post(async (req, res) => {
     const { username, password } = req.body;
     const result = await queryUserByName(username);
 
-    console.log(result)
-    const saltPwd = saltedMd5(password, 'salt', false);
+    const saltPwd = hashPassword(password);
     if (result && result[0].password === saltPwd) {
-        const token = sign({username},
-            'secret',
-            { expiresIn: '8h' });
+        const token = signJWT(result[0].id, result[0].name, result[0].role);
 
         return res.status(200).json({ username, token });
     } else {
