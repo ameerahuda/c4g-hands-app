@@ -1,8 +1,8 @@
-import { verify } from 'jsonwebtoken';
 import nextConnect from 'next-connect';
 import CustomError from "@/backend/error/CustomError";
 import {decodeJWT} from "@/backend/service/user";
 
+// https://www.npmjs.com/package/next-connect
 export default function getHandler() {
     return nextConnect({
         attachParams: true,
@@ -20,7 +20,7 @@ export default function getHandler() {
         req.username = null;
         req.role = null;
 
-        // authrorization code should start with Bearer
+        // authorization code should start with Bearer
         const { authorization } = req.headers;
 
         if (!authorization) {

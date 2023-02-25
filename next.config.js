@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
-require('dotenv').config()
+
+require('dotenv').config() // https://www.npmjs.com/package/dotenv
 
 const withPWA = require('next-pwa')({
     dest: 'public'
