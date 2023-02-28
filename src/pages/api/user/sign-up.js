@@ -20,7 +20,7 @@ handler.post(async (req, res) => {
         password: saltPwd
     });
 
-    return res.status(200).json({name: result.name, id: result.insertId});
+    return res.status(200).json(result);
 });
 
 export default handler;

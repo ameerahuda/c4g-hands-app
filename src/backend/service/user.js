@@ -31,8 +31,8 @@ const hashPassword = (password) => {
     return saltedMd5(password, serverRuntimeConfig.API_SALT, false);
 };
 
-const signJWT = (userId, username, role) => {
-    return sign({userId, username, role},
+const signJWT = (email, first_name, last_name, user_type) => {
+    return sign({email, first_name, last_name, user_type},
         serverRuntimeConfig.API_SECRET,
         { expiresIn: '8h' });
 };

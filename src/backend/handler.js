@@ -34,9 +34,11 @@ export default function getHandler() {
             const decoded = decodeJWT(authorization);
 
             if (decoded) {
-                req.userId = decoded.userId;
-                req.username = decoded.username;
-                req.role = decoded.role;
+                // email, first_name, last_name, user_type
+                req.email = decoded.email;
+                req.first_name = decoded.first_name;
+                req.last_name = decoded.last_name;
+                req.user_type = decoded.user_type;
 
                 next();
             } else {
