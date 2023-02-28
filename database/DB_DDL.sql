@@ -23,9 +23,9 @@ CREATE TABLE Partner
 (
     partnerID           varchar(10) NOT NULL,
     partnerName         varchar(50) NOT NULL,
-    partnerAddress      varchar(10) NOT NULL,
+    partnerAddress      varchar(100) NOT NULL,
     partnerSocialHandle varchar(50) NOT NULL,
-    partnerBudget       varchar(5)  NOT NULL,
+    partnerBudget       DECIMAL(13, 2)  NOT NULL,
     createdAt           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     createdBy           varchar(50),
 

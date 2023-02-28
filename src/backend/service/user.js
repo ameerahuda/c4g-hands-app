@@ -7,18 +7,23 @@ import CustomError from "@/backend/error/CustomError";
 const { serverRuntimeConfig } = getConfig();
 
 const insertUser = async (data) => {
-    const user = await pool.query("INSERT INTO user SET ?", data);
+    const user = await pool.query("INSERT INTO User SET ?", data);
     return user;
 };
 
-const queryUserByName = async (name) => {
-    const user = await pool.query("SELECT * FROM user where name = ?",
-        [name]);
+const updateUser = async (data, email) => {
+    const user = await pool.query("Update User SET ? where email=?", [data, email]);
     return user;
+};
+
+const queryUserByEmail = async (name) => {
+    const user = await pool.query("SELECT * FROM User where email = ?",
+        [name]);
+    return user && user.length > 0 ? user[0] : undefined;
 };
 
 const queryUsers = async () => {
-    const users = await pool.query("SELECT * FROM user");
+    const users = await pool.query("SELECT * FROM User");
     return users;
 };
 
@@ -57,6 +62,7 @@ export {
     signJWT,
     decodeJWT,
     insertUser,
-    queryUserByName,
+    updateUser,
+    queryUserByEmail,
     queryUsers
 }
