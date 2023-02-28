@@ -1,4 +1,4 @@
-import {hashPassword, insertUser, queryUserByName} from "@/backend/service/user";
+import {hashPassword, insertUser, queryUserByEmail} from "@/backend/service/user";
 import getHandler from "@/backend/handler";
 import CustomError from "@/backend/error/CustomError";
 
@@ -6,22 +6,21 @@ const handler = getHandler();
 
 // POST /api/user/sign-up
 handler.post(async (req, res) => {
-    const {username, password, role} = req.body;
+    const {email, password} = req.body;
 
-    let result = await queryUserByName(username);
+    let result = await queryUserByEmail(email);
 
-    if (result && result.length > 0) {
+    if (result) {
         throw new CustomError("user already exists", 401);
     }
 
     const saltPwd = hashPassword(password);
     result = await insertUser({
-        name: username,
-        password: saltPwd,
-        role: role
+        ...req.body,
+        password: saltPwd
     });
 
-    return res.status(200).json({name: result.name, id: result.insertId});
+    return res.status(200).json(result);
 });
 
 export default handler;
