@@ -25,6 +25,10 @@ const SigninModal = ({ handleLogin }) => {
 				</span>
 			</div>
 			<div className={styles.rightContent}>
+				<div className={styles.shortHeader}>
+					<p className={styles.shortTitle}>Welcome Back</p>
+					<p className={styles.shortSubtitle}>Sign in to continue</p>
+				</div>
 				<form className={styles.formContainer} onSubmit={handleLogin}>
 		        	<label htmlFor="email">Email</label>
 					<input
@@ -44,7 +48,6 @@ const SigninModal = ({ handleLogin }) => {
 					onChange={handlePasswordChange}
 					required
 					/>
-
 					<button type="submit">Continue</button>
 		        </form>
 			</div>
