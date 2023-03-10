@@ -16,9 +16,10 @@ export default function getHandler() {
             res.status(405).json({ error: `Method ${req.method} Not Allowed` });
         },
     }).use((req, res, next) => {
-        req.userId = null;
-        req.username = null;
-        req.role = null;
+        req.email = null;
+        req.first_name = null;
+        req.last_name = null;
+        req.user_type = null;
 
         // authorization code should start with Bearer
         const { authorization } = req.headers;
