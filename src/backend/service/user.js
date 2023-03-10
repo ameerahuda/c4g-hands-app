@@ -7,11 +7,20 @@ import CustomError from "@/backend/error/CustomError";
 const { serverRuntimeConfig } = getConfig();
 
 const insertUser = async (data) => {
+    data.createdAt = undefined;
+    delete data.createdAt;
+
     const user = await pool.query("INSERT INTO User SET ?", data);
     return user;
 };
 
 const updateUser = async (data, email) => {
+    // {...data, createdBy:'', createdAt:''}
+    data.createdAt = undefined;
+    data.createdBy = undefined;
+    delete data.createdBy;
+    delete data.createdAt;
+
     const user = await pool.query("Update User SET ? where email=?", [data, email]);
     return user;
 };
