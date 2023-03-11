@@ -1,4 +1,12 @@
-CREATE DATABASE c4g_hands_db IF NOT EXISTS;
+-- CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
+CREATE USER IF NOT EXISTS gatechUser@localhost IDENTIFIED BY 'gatech123';
+
+DROP DATABASE IF EXISTS `c4g_hands_db`; 
+
+SET default_storage_engine=InnoDB;
+SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE DATABASE  IF NOT EXISTS c4g_hands_db;
 
 use c4g_hands_db;
 
@@ -12,7 +20,7 @@ CREATE TABLE User
     birthdate   date        NOT NULL,
     gender      char(1)     NOT NULL,
     race        char(1)     NOT NULL,
-    phoneNumber varchar(10) NOT NULL,
+    phoneNumber varchar(10) NOT NULL,	
     createdAt   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     createdBy   varchar(50),
 
