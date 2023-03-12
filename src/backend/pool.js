@@ -9,7 +9,7 @@ const pool = mysql({
         host: serverRuntimeConfig.DB_HOST || "c4g-hands-app.unitedway.dreamhosters.com",
         user: serverRuntimeConfig.DB_USER || "c4g_user",
         password: serverRuntimeConfig.DB_PWD || "f#r#T#RQ@#r",
-        port: serverRuntimeConfig.DB_PORT || 80,
+        port: serverRuntimeConfig.DB_PORT || 3306,
         database: serverRuntimeConfig.DB_NAME || "c4g_hands_db",
     },
 });
