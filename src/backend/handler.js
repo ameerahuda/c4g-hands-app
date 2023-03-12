@@ -7,13 +7,16 @@ export default function getHandler() {
     return nextConnect({
         attachParams: true,
         onError(err, req, res) {
+            console.error(err);
             let error = { ...err };
             error.statusCode = err.statusCode || 500;
             error.message = err.message;
             res.status(error.statusCode).json(error);
+            res.end();
         },
         onNoMatch(req, res) {
             res.status(405).json({ error: `Method ${req.method} Not Allowed` });
+            res.end();
         },
     }).use((req, res, next) => {
         req.email = null;
