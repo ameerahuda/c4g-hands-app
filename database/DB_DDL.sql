@@ -1,4 +1,12 @@
-CREATE DATABASE c4g_hands_db IF NOT EXISTS;
+-- CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
+CREATE USER IF NOT EXISTS gatechUser@localhost IDENTIFIED BY 'gatech123';
+
+DROP DATABASE IF EXISTS `c4g_hands_db`;
+
+SET default_storage_engine=InnoDB;
+SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE DATABASE  IF NOT EXISTS c4g_hands_db;
 
 use c4g_hands_db;
 
@@ -48,7 +56,7 @@ CREATE TABLE Programs
 (
     programID            varchar(10)  NOT NULL,
     partnerID            varchar(10)  NOT NULL,
-    fk_Classes_className varchar(50)  NOT NULL,
+    -- fk_Classes_className varchar(50)  NOT NULL,
     programName          varchar(100) NOT NULL,
     programBudget        DECIMAL(13, 2),
     prehouseMonths       int          NOT NULL,
@@ -65,8 +73,8 @@ CREATE TABLE Programs
     createdAt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     createdBy            varchar(50),
 
-    PRIMARY KEY (programID),
-    FOREIGN KEY (fk_Classes_className) REFERENCES Classes (className)
+    PRIMARY KEY (programID)
+    --  FOREIGN KEY (fk_Classes_className) REFERENCES Classes (className)
 );
 
 
