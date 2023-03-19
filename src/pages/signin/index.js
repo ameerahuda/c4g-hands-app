@@ -22,6 +22,7 @@ export default function Signin() {
 		if (isAuthenticated) {
 			router.push('/profile')
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isAuthenticated]);
 
   	return (

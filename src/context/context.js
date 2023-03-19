@@ -65,6 +65,7 @@ const Provider = ({ children }) => {
         if (token && !user) {
             getUser(email, token);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token]);
 
     useEffect(() => {

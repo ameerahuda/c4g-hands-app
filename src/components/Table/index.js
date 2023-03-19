@@ -26,8 +26,8 @@ const Table = ({ tableColumns, tableData, renderRowSubComponent }) => {
 				<thead>
 					{headerGroups.map((headerGroup, index) => (
 						<tr key={index} {...headerGroup.getHeaderGroupProps()} className={styles.tableHeader}>
-							{headerGroup.headers.map(column => (
-								<th {...column.getHeaderProps()}>{column.render('Header')}</th>
+							{headerGroup.headers.map((column, index) => (
+								<th key={index} {...column.getHeaderProps()}>{column.render('Header')}</th>
 							))}
 						</tr>
 					))}
@@ -39,9 +39,9 @@ const Table = ({ tableColumns, tableData, renderRowSubComponent }) => {
 						return (
 							<React.Fragment key={index}>
 								<tr {...row.getRowProps()} className={styles.tableBodyRow}>
-									{row.cells.map(cell => {
+									{row.cells.map((cell, index) => {
 										return (
-											<td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+											<td key={index} {...cell.getCellProps()}>{cell.render('Cell')}</td>
 										);
 									})}
 								</tr>
