@@ -107,10 +107,6 @@
     }
 
     .shortHeader {
-        /* position: absolute;
-        top: 40%;
-        left: 15%;
-        color: white; */
         display: block;
         text-align: center;
         margin-bottom: 15rem;

@@ -17,7 +17,7 @@ const nextConfig = {
         DB_NAME: process.env.DB_NAME,
         API_SECRET: process.env.API_SECRET || "c4g_user",
         API_SALT: process.env.API_SALT || "c4g_user"
-    },
+    }
 }
 
 module.exports = withPWA(

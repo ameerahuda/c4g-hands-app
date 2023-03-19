@@ -1,0 +1,58 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    min-height: 100vh;
+    font-family: var(--font-family);
+}
+
+.header {
+    margin-top: 6rem;
+}
+
+.profileHeader {
+    width: 100%;
+    height: 50%;
+    position: relative;
+}
+
+.profileHeader img {
+    width: 100%;
+    height: 50vh;
+    /* position: absolute; */
+}
+
+.title {
+    position: absolute;
+    top: 40%;
+    left: 15%;
+    font-size: 3rem;
+    color: white;
+}
+
+.acctInfoSection {
+    display: grid;
+    grid-template-columns: 40% 40%;
+    margin-top: 2rem;
+    margin-left: 5rem;
+    font-size: 2rem;
+    grid-column: 1;
+}
+
+.acctInfo {
+    font-size: 2rem;
+    margin-top: 2rem;
+    margin-left: 5rem;
+}
+
+.acctInfoLabel {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    font-weight: 600;
+    color: var(--light-blue);
+}
+
+.acctInfoValue {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+}
