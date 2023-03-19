@@ -6,6 +6,7 @@ const handler = getHandler();
 
 // GET /api/user/[email]
 handler.get(async (req, res) => {
+    console.log('IN GET USER API', req, res)
 
     const result = await queryUserByEmail(req.query.email);
     if (result) {

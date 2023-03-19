@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import styles from '@/styles/SignIn.module.css';
-import SigninModal from '@/components/SigninModal/SigninModal';
+import SigninModal from '@/components/SigninModal';
+import { useStateContext } from '@/context/context';
 
 export default function Signin() {
+	const { 
+		login,
+		isAuthenticated 
+	} = useStateContext();
 	const router = useRouter();
-	const [loggedIn, setLoggedIn] = useState(false);
 
-	const handleLogin = (event) => {
+
+	const handleLogin = (event, email, password) => {
 		event.preventDefault();
-		// Check email and password here
-		router.push('/createPartner')
-		setLoggedIn(true);
+		login(email, password);
 	};
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			router.push('/profile')
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isAuthenticated]);
 
   	return (
 		<>
@@ -25,7 +35,7 @@ export default function Signin() {
 			</Head>
 			<main className={styles.main}>
 				<div className={styles.signin}></div>
-				{!loggedIn && (
+				{!isAuthenticated && (
 					<SigninModal handleLogin={handleLogin} />
 				)}
 			</main>

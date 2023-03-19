@@ -45,6 +45,9 @@
   --white: #FFFFFF;
   --light-blue: #3792cb;
   --grey: #CCCCCC;
+  --grey-1: #f9f9f9;
+  --grey-2: #adadad;
+  --black: #000000
 }
 
 @media (prefers-color-scheme: dark) {

@@ -1,0 +1,31 @@
+.table {
+    /* display: flex; */
+    margin: 1rem;
+}
+
+.tableContainer {
+    margin: 1rem;
+    flex-direction: column;
+    border-radius: 8px;
+    box-shadow:  0 10px 27px rgba(0, 0, 0, 0.1);
+    width: 95vw;
+    border-collapse: collapse;
+}
+
+.tableHeader {
+    font-size: 13px;
+    width: 100%;
+}
+
+.tableHeader th {
+    padding: 1rem 0rem;
+    text-align: left;
+    text-align: center;
+}
+
+.tableBodyRow td {
+    font-size: 12px;
+    text-align: center;
+    padding: 1rem 0;
+    border-top: 2px solid var(--grey-1);
+}
