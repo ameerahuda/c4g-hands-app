@@ -13,7 +13,7 @@ const Provider = ({ children }) => {
 
     const getAuthToken = async (email, password) => {
         setEmail(email);
-        console.log('IN getAuthToken')
+        
         let config = {
             method: 'post',
 			url: `${process.env.NEXT_PUBLIC_API_URL}/user/sign-in`,
@@ -29,7 +29,6 @@ const Provider = ({ children }) => {
 
 		await axios(config)
 			.then((response) => {
-                console.log('auth token response', response)
 				if (response.data.token) {
                     setToken(response.data.token);
                     sessionStorage.setItem('token', JSON.stringify(response.data.token))
@@ -41,18 +40,14 @@ const Provider = ({ children }) => {
     }
 
     const getUser = async (email, token) => {
-        console.log('token', token)
         const config = {
             method: 'get',
 			url: `${process.env.NEXT_PUBLIC_API_URL}/user/${email}`,
 			headers: { Authorization: `Bearer ${token}` }
 		};
 
-        console.log('getUser', config)
-
 		await axios(config)
 			.then((response) => {
-                console.log('user response', response)
 				setUser(response.data)
                 sessionStorage.setItem('user', JSON.stringify(response.data))
                 setIsAuthenticated(true);
@@ -77,7 +72,6 @@ const Provider = ({ children }) => {
         let user = JSON.parse(sessionStorage.getItem('user'));
 
         if (token) {
-            console.log('context useEffect token', token)
             setToken(token)
             if (user) {
                 setUser(user);

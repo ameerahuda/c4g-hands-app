@@ -29,7 +29,6 @@ export default function Partners() {
 
     useEffect(() => {
         const getPartners = async () => {
-            console.log('in getPartners token', token)
             let config = {
                 method: 'get',
                 url: `${process.env.NEXT_PUBLIC_API_URL}/partner`,
@@ -38,7 +37,6 @@ export default function Partners() {
     
             await axios(config)
                 .then((response) => {
-                    console.log('partners', response);
                     setPartners(response.data);
                     setIsLoading(false);
                 })
@@ -179,7 +177,6 @@ export default function Partners() {
 
         csvData.push(headerRow);
         partners.forEach(item => {
-            console.log('item', item)
             csvData.push(Object.values(item));
         });
 
