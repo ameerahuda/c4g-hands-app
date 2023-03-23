@@ -1,6 +1,7 @@
 import getHandler from "@/backend/handler";
 import {insertPartner, queryAllPartners, queryByPartnerID, updatePartner} from "@/backend/service/partner-service";
 import CustomError from "@/backend/error/CustomError";
+import {generateID} from "@/backend/service/common";
 
 const handler = getHandler();
 
@@ -21,8 +22,11 @@ handler.post(async (req, res) => {
         throw new CustomError("PartnerID already exists", 401);
     }
 
+    let genID = partnerID;
+    if (!genID)
+        genID = generateID();
     result = await insertPartner({
-        ...req.body, createdBy:req.email
+        ...req.body, partnerID:genID, createdBy:req.email
     });
 
     return res.status(200).json(result);

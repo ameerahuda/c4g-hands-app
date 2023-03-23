@@ -24,9 +24,21 @@ WHERE
 /* show partner statistics */
 /*this is aggregate partner data such as budget remaining)*/
 
-Select  partner.partnerBudget as Budget_Allocated, SUM(programs.programBudget) as Budget_Spent , (partner.partnerBudget- SUM(programs.programBudget)) as Budget_Remaining
-FROM program, partner
-WHERE program.partnerID = partner.partnerID  AND program.partnerID = 'ABC001';
+Select partner.partnerName,
+       partner.partnerAddress,
+       partner.partnerBudget,
+       count(HouseholdIntake.fk_User_email)                  as numOfHouseholds,
+       SUM(programs.programBudget)                           as moneySpent,
+       (partner.partnerBudget - SUM(programs.programBudget)) as moneyRemaining,
+       0                                                     as householdsCompleted,
+       0                                                     as householdsDropped,
+       0                                                     as householdsInProgres
+FROM Programs programs,
+     Partner partner,
+     HouseholdIntake
+WHERE programs.partnerID = partner.partnerID
+  AND HouseholdIntake.fk_Partner_partnerID = partner.partnerID
+  AND programs.partnerID = $(partnerID);
 
 
 
