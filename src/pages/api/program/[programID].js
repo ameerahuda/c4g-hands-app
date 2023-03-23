@@ -1,17 +1,17 @@
 import getHandler from "@/backend/handler";
 import CustomError from "@/backend/error/CustomError";
-import {queryByPartnerID, updatePartner} from "@/backend/service/partner-service";
+import {queryByProgramID} from "@/backend/service/program-service";
 
 const handler = getHandler();
 
-// GET /api/partner/[partnerID]
+// GET /api/program/[programID]
 handler.get(async (req, res) => {
 
-    const result = await queryByPartnerID(req.query.partnerID);
+    const result = await queryByProgramID(req.query.programID);
     if (result) {
         return res.status(200).json({...result});
     } else {
-        throw new CustomError(`$req.query.partnerID not found`, 404);
+        throw new CustomError(`$req.query.programID not found`, 404);
     }
 });
 
