@@ -1,9 +1,18 @@
 import getHandler from "@/backend/handler";
+import {queryByPartnerID, queryStaffView} from "@/backend/service/partner-service";
+import CustomError from "@/backend/error/CustomError";
 
 const handler = getHandler();
 
 // POST /api/staff/general
 handler.get(async (req, res) => {
+
+    // const result = await queryStaffView();
+    // if (result) {
+    //     return res.status(200).json({...result});
+    // } else {
+    //     throw new CustomError(`Not found`, 404);
+    // }
 
     // mock the response for now
     const data = [
