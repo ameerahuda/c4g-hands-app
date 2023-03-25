@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import styles from '@/styles/Partners.module.css';
 import Table from '@/components/Table';
@@ -20,6 +21,7 @@ export default function Partners() {
 		isAuthenticated,
         token
 	} = useStateContext();
+    const router = useRouter();
     const [partnerForm, setPartnerForm] = useState(initialFormState);
 	const [partnerCreated, setPartnerCreated] = useState(false);
     const [showCreatePartnerModal, setShowCreatePartnerModal] = useState(false);
@@ -49,7 +51,13 @@ export default function Partners() {
             getPartners();
         }
 
-    }, [token])
+    }, [token]);
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            router.push("/signin")
+        }
+    }, [isAuthenticated])
 
     const createPartner = async (partner) => {
         let config = {

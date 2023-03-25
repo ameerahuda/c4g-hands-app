@@ -12,7 +12,8 @@ export default function NavBar() {
     const [hamburgerMenu, setHamburgerMenu] = useState(false);
     const {
         isAuthenticated,
-        user
+        user,
+        logout
     } = useStateContext();
 
     return (
@@ -45,10 +46,13 @@ export default function NavBar() {
                             <Link className={styles.link} href="/profile" onClick={() => {setActive('/profile'); setHamburgerMenu(false)}}>My Profile</Link>
                         </li>
                         {user?.user_type === 'UnitedWay Staff' &&
-                            <li className={`${styles.navItem} ${active === '/partners' && styles.active}`}>
-                                <Link className={styles.link} href="/partners" onClick={() => {setActive('/partners'); setHamburgerMenu(false)}}>View Partners</Link>
+                            <li className={`${styles.navItem} ${active === '/admin/partners' && styles.active}`}>
+                                <Link className={styles.link} href="/admin/partners" onClick={() => {setActive('/admin/partners'); setHamburgerMenu(false)}}>View Partners</Link>
                             </li>
                         }
+                        <li className={`${styles.navItem}`}>
+                            <Link className={styles.link} href="/signin" onClick={() => {logout(); setActive('/signin'); setHamburgerMenu(false)}}>Sign out</Link>
+                        </li>
                     </>
                 }
             </ul>
