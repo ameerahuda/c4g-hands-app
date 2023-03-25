@@ -15,7 +15,7 @@ export default function Profile() {
         if (!isAuthenticated) {
             router.push("/signin")
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated]);
 
     return isAuthenticated && (
         <>

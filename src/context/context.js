@@ -26,7 +26,7 @@ const Provider = ({ children }) => {
 				"password": password
 			}
 		};
-
+        
 		await axios(config)
 			.then((response) => {
 				if (response.data.token) {
@@ -86,7 +86,8 @@ const Provider = ({ children }) => {
         setToken('');
         setUser(null);
         sessionStorage.removeItem('user');
-        router.push("/");
+        sessionStorage.removeItem('token');
+        router.push("/signin");
     };
 
     const exposed = {
