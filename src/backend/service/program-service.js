@@ -1,4 +1,5 @@
 import {pool} from "@/backend/pool";
+import CustomError from "@/backend/error/CustomError";
 
 
 const queryAllPrograms = async () => {
@@ -13,11 +14,28 @@ const insertProgram = async (data) => {
 
 const queryByProgramID = async (programID) => {
     if (!programID) {
-        return undefined;
+        throw new CustomError('partnerID undefined', 404);
     }
     const result = await pool.query("SELECT * FROM Programs where programID = ?",
         [programID]);
-    return result && result.length > 0 ? result[0] : undefined;
+    if (result && result.length > 0) {
+        return result[0];
+    } else {
+        throw new CustomError(`Cannot find by ${programID}`, 404);
+    }
+};
+
+const queryProgramByPartnerID = async (partnerID) => {
+    if (!partnerID) {
+        throw new CustomError('partnerID undefined', 404);
+    }
+    const result = await pool.query("SELECT * FROM Programs where partnerID = ?",
+        [partnerID]);
+    if (result && result.length > 0) {
+        return result;
+    } else {
+        throw new CustomError(`Cannot find by ${partnerID}`, 404);
+    }
 };
 
 const updateProgram = async (data, programID) => {
@@ -36,6 +54,7 @@ const updateProgram = async (data, programID) => {
 
 export {
     queryAllPrograms,
+    queryProgramByPartnerID,
     insertProgram,
     updateProgram,
     queryByProgramID

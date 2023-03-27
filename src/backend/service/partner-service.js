@@ -1,4 +1,5 @@
 import {pool} from "@/backend/pool";
+import CustomError from "@/backend/error/CustomError";
 
 
 const queryAllPartners = async () => {
@@ -13,11 +14,15 @@ const insertPartner = async (data) => {
 
 const queryByPartnerID = async (partnerID) => {
     if (!partnerID) {
-        return undefined;
+        throw new CustomError('partnerID undefined', 404);
     }
     const result = await pool.query("SELECT * FROM Partner where partnerID = ?",
         [partnerID]);
-    return result && result.length > 0 ? result[0] : undefined;
+    if (result && result.length > 0) {
+        return result[0];
+    } else {
+        throw new CustomError(`Cannot find by ${partnerID}`, 404);
+    }
 };
 
 const updatePartner = async (data, partnerID) => {

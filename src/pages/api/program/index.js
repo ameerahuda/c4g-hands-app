@@ -1,16 +1,21 @@
 import getHandler from "@/backend/handler";
 import CustomError from "@/backend/error/CustomError";
 import {generateID} from "@/backend/service/common";
-import {insertProgram, queryAllPrograms, queryByProgramID, updateProgram} from "@/backend/service/program-service";
+import {insertProgram, queryAllPrograms, queryByProgramID, queryProgramByPartnerID, updateProgram} from "@/backend/service/program-service";
 
 const handler = getHandler();
 
 // GET /api/program query all programs
 handler.get(async (req, res) => {
-    const allPrograms = await queryAllPrograms();
+
+    let allPrograms;
+    if (req.query && req.query.partnerID)
+        allPrograms = await queryProgramByPartnerID(req.query.partnerID);
+    else
+        allPrograms = await queryAllPrograms();
+
     return res.status(200).json(allPrograms);
 });
-
 
 // POST /api/program create program
 handler.post(async (req, res) => {
