@@ -14,7 +14,7 @@ const insertClass = async (data) => {
 
 const queryByClassName = async (className) => {
     if (!className) {
-        throw new CustomError('partnerID undefined', 404);
+        throw new CustomError('className undefined', 404);
     }
     const result = await pool.query("SELECT * FROM Classes where className = ?",
         [className]);

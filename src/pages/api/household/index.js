@@ -3,11 +3,11 @@ import {
     insertHouseholdIntake,
     queryAllHouseholdIntake,
     queryByHouseholdIntakeID,
-    queryHouseholdIntakeByPartnerAndProgram, updateHouseholdIntake
+    queryHouseholdIntakeByPartnerAndProgram,
+    updateHouseholdIntake
 } from "@/backend/service/household";
 import CustomError from "@/backend/error/CustomError";
 import {generateID} from "@/backend/service/common";
-import {queryByPartnerID, updatePartner} from "@/backend/service/partner-service";
 
 const handler = getHandler();
 
@@ -28,21 +28,24 @@ handler.get(async (req, res) => {
 handler.post(async (req, res) => {
     const {householdIntakeID} = req.body;
 
-    let result = await queryByHouseholdIntakeID(householdIntakeID);
-
-    if (result) {
-        throw new CustomError("HouseholdIntakeID already exists", 401);
-    }
-
     let genID = householdIntakeID;
     if (!genID)
         genID = generateID();
+    else {
+        const result = await queryByHouseholdIntakeID(householdIntakeID);
 
-    const result2 = await insertHouseholdIntake({
-        ...req.body, householdIntakeID:genID, createdBy:req.email
+        if (result) {
+            throw new CustomError("HouseholdIntakeID already exists", 401);
+        }
+    }
+
+    await insertHouseholdIntake({
+        ...req.body,
+        householdIntakeID:genID,
+        createdBy:req.email
     });
 
-    return res.status(200).json(result2);
+    return res.status(200).json(await queryByHouseholdIntakeID(genID));
 });
 
 
@@ -52,8 +55,8 @@ handler.put(async (req, res) => {
 
     const result = await queryByHouseholdIntakeID(householdIntakeID);
     if (result) {
-        const result2 = await updateHouseholdIntake(req.body, householdIntakeID);
-        return res.status(200).json({...result2});
+        await updateHouseholdIntake(req.body, householdIntakeID);
+        return res.status(200).json(await queryByHouseholdIntakeID(householdIntakeID));
     } else {
         throw new CustomError(`$req.query.householdIntakeID not found`, 404);
     }

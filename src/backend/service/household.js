@@ -14,7 +14,7 @@ const insertHouseholdIntake = async (data) => {
 
 const queryByHouseholdIntakeID = async (householdIntakeID) => {
     if (!householdIntakeID) {
-        throw new CustomError('partnerID undefined', 404);
+        throw new CustomError('householdIntakeID undefined', 404);
     }
     const result = await pool.query("SELECT * FROM HouseholdIntake where householdIntakeID = ?",
         [householdIntakeID]);

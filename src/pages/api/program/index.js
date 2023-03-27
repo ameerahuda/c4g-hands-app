@@ -21,21 +21,22 @@ handler.get(async (req, res) => {
 // POST /api/program create program
 handler.post(async (req, res) => {
     const {programID} = req.body;
-
-    let result = await queryByProgramID(programID);
-
-    if (result) {
-        throw new CustomError("ProgramID already exists", 401);
-    }
-
     let genID = programID;
     if (!genID)
         genID = generateID();
-    result = await insertProgram({
+    else {
+        const result = await queryByProgramID(programID);
+
+        if (result) {
+            throw new CustomError("ProgramID already exists", 401);
+        }
+    }
+
+    await insertProgram({
         ...req.body, programID:genID, createdBy:req.email
     });
 
-    return res.status(200).json(result);
+    return res.status(200).json(await queryByProgramID(genID));
 });
 
 
@@ -45,8 +46,8 @@ handler.put(async (req, res) => {
 
     const result = await queryByProgramID(programID);
     if (result) {
-        const result2 = await updateProgram(req.body, programID);
-        return res.status(200).json({...result2});
+        await updateProgram(req.body, programID);
+        return res.status(200).json(await queryByProgramID(programID));
     } else {
         throw new CustomError(`$req.query.programID not found`, 404);
     }
