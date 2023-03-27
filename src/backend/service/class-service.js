@@ -1,4 +1,5 @@
 import {pool} from "@/backend/pool";
+import CustomError from "@/backend/error/CustomError";
 
 
 const queryAllClasses = async () => {
@@ -13,11 +14,15 @@ const insertClass = async (data) => {
 
 const queryByClassName = async (className) => {
     if (!className) {
-        return undefined;
+        throw new CustomError('className undefined', 404);
     }
     const result = await pool.query("SELECT * FROM Classes where className = ?",
         [className]);
-    return result && result.length > 0 ? result[0] : undefined;
+    if (result && result.length > 0) {
+        return result[0];
+    } else {
+        throw new CustomError(`Cannot find by ${className}`, 404);
+    }
 };
 
 const updateClass = async (data, className) => {

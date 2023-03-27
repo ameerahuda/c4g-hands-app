@@ -16,20 +16,22 @@ handler.get(async (req, res) => {
 handler.post(async (req, res) => {
     const {partnerID} = req.body;
 
-    let result = await queryByPartnerID(partnerID);
-
-    if (result) {
-        throw new CustomError("PartnerID already exists", 401);
-    }
-
     let genID = partnerID;
-    if (!genID)
+    if (!genID) {
         genID = generateID();
-    result = await insertPartner({
+    } else {
+        const result = await queryByPartnerID(partnerID);
+        if (result) {
+            throw new CustomError("PartnerID already exists", 401);
+        }
+    }
+    console.log(`genID ${genID}`)
+
+    await insertPartner({
         ...req.body, partnerID:genID, createdBy:req.email
     });
 
-    return res.status(200).json(result);
+    return res.status(200).json(await queryByPartnerID(genID));
 });
 
 
@@ -39,8 +41,8 @@ handler.put(async (req, res) => {
 
     const result = await queryByPartnerID(partnerID);
     if (result) {
-        const result2 = await updatePartner(req.body, partnerID);
-        return res.status(200).json({...result2});
+        await updatePartner(req.body, partnerID);
+        return res.status(200).json(await queryByPartnerID(partnerID));
     } else {
         throw new CustomError(`$req.query.partnerID not found`, 404);
     }
