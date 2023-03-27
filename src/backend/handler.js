@@ -7,7 +7,8 @@ export default function getHandler() {
     return nextConnect({
         attachParams: true,
         onError(err, req, res) {
-            console.error(err);
+            if (err.statusCode && err.statusCode !== 404)
+                console.error(err);
             let error = { ...err };
             error.statusCode = err.statusCode || 500;
             error.message = err.message;
