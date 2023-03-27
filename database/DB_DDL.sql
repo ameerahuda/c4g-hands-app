@@ -80,6 +80,7 @@ CREATE TABLE Programs
 
 CREATE TABLE HouseholdIntake
 (
+    householdIntakeID     varchar(10)   NOT NULL,
     fk_User_email         varchar(50)   NOT NULL,
     fk_Partner_partnerID  varchar(10)   NOT NULL,
     fk_Program_programID  varchar(10)   NOT NULL,
@@ -115,7 +116,7 @@ CREATE TABLE HouseholdIntake
     createdAt             TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     createdBy             varchar(50),
 
-    PRIMARY KEY (fk_User_email, fk_Partner_partnerID, fk_Program_programID),
+    PRIMARY KEY (householdIntakeID),
     FOREIGN KEY (fk_User_email) REFERENCES User (email),
     FOREIGN KEY (fk_Partner_partnerID) REFERENCES Partner (partnerID),
     FOREIGN KEY (fk_Program_programID) REFERENCES Programs (programID)

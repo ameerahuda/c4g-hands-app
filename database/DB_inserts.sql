@@ -64,56 +64,56 @@ VALUES ('XYZ001-04', 'XYZ001', 'Saving for veteran housing program', 5000.00, 4,
 
 INSERT INTO HouseholdIntake
 VALUES
-    ("userhouse1@gmail.com", "ABC001", "ABC001-01", "Mary Grace", "John's Family", STR_TO_DATE('12/12/2022', '%m/%d/%Y'), "Motel", "Motel66 on main street", "1234 Main Street, Any Town, USA 55555",
+    ('house00001', "userhouse1@gmail.com", "ABC001", "ABC001-01", "Mary Grace", "John's Family", STR_TO_DATE('12/12/2022', '%m/%d/%Y'), "Motel", "Motel66 on main street", "1234 Main Street, Any Town, USA 55555",
      "55555", "Y", "Married", "High School", "Never Served", "FInd the values", "Unemployed", 2, 2, 1500.00, "no kown address", "John, 54; Julia 45",
      "Henry 12; James 15", STR_TO_DATE('01/01/2023', '%m/%d/%Y'), "5555 2nd Street, Any Town, USA, 55555", "Any Town Rentals", "Any Toen", "This County", "55555", 1200.00,
      STR_TO_DATE('4/5/2023', '%m/%d/%Y'), "Completed", "no impact notes for now", current_timestamp, 'Init');
 
 INSERT INTO HouseholdIntake
 VALUES
-    ("userhouse2@gmail.com", "ABC001", "ABC001-01", "Mary Grace", "Adam's Family", STR_TO_DATE('12/12/2022', '%m/%d/%Y'), "Motel", "Motel99 on main street", "457 Main Street, Any Town, USA 55555",
+    ('house00002', "userhouse2@gmail.com", "ABC001", "ABC001-01", "Mary Grace", "Adam's Family", STR_TO_DATE('12/12/2022', '%m/%d/%Y'), "Motel", "Motel99 on main street", "457 Main Street, Any Town, USA 55555",
      "55555", "N", "Married", "High School", "Retired", "FInd the values2", "Employed", 2, 0, 500.00, "no kown address2", "Andy, 54; Maria 45",
      "No Kids here", STR_TO_DATE('01/01/2023', '%m/%d/%Y'), "1232 3nd Street, Any Town, USA, 55555", "Any Town Rentals2", "Phoenix", "Maricopa County", "55555", 1200.00,
      STR_TO_DATE('4/5/2023', '%m/%d/%Y'), "Completed", "no impact notes for now", current_timestamp, 'Init');
 
 INSERT INTO HouseholdIntake
 VALUES
-    ("userhouse3@gmail.com", "ABC001", "ABC001-01", "Mary Grace", "Cathy's Family", STR_TO_DATE('12/12/2022', '%m/%d/%Y'), "Motel12", "Motel45 on main street", "4444 Main Street, Any Town, USA 55555",
+    ('house00003', "userhouse3@gmail.com", "ABC001", "ABC001-01", "Mary Grace", "Cathy's Family", STR_TO_DATE('12/12/2022', '%m/%d/%Y'), "Motel12", "Motel45 on main street", "4444 Main Street, Any Town, USA 55555",
      "55555", "Y", "Married", "Associate Degree", "Never Served", "FInd the values23", "Part Time", 2, 1,  1300.00, "no kown address34", "Shanaya, 54; Julia 45",
      " boy 15", STR_TO_DATE('01/01/2023', '%m/%d/%Y'), "5555 32nd Street, Any Town, USA, 55555", "Any Town Rentals45", "Johns Creek", "Forsyth County", "55555", 1200.00,
      STR_TO_DATE('4/5/2023', '%m/%d/%Y'), "Completed", "no impact notes for now", current_timestamp, 'Init');
 
 INSERT INTO HouseholdIntake
 VALUES
-    ("userhouse4@gmail.com", "ABC001", "ABC001-02", "Mary Grace", "Cathy's Family2", STR_TO_DATE('12/12/2022', '%m/%d/%Y'), "Motel12", "Motel45 on main street", "4444 Main Street, Any Town, USA 55555",
+    ('house00004', "userhouse4@gmail.com", "ABC001", "ABC001-02", "Mary Grace", "Cathy's Family2", STR_TO_DATE('12/12/2022', '%m/%d/%Y'), "Motel12", "Motel45 on main street", "4444 Main Street, Any Town, USA 55555",
      "55555", "Y", "Married", "Associate Degree", "Never Served", "FInd the values23", "Part Time", 2, 1,  1300.00, "no kown address34", "Shanaya, 54; Julia 45",
      " boy 15", STR_TO_DATE('01/01/2023', '%m/%d/%Y'), "5555 32nd Street, Any Town, USA, 55555", "Any Town Rentals45", "Johns Creek", "Forsyth County", "55555", 1200.00,
      STR_TO_DATE('4/5/2023', '%m/%d/%Y'), "Dropped", "no impact notes for now", current_timestamp, 'Init');
 
 INSERT INTO HouseholdIntake
 VALUES
-    ("userhouse5@gmail.com", "ABC001", "ABC001-02", "Mary Allen", "Cindy's Family", STR_TO_DATE('12/12/2023', '%m/%d/%Y'), "Motel66", "Motel66 on main street", "4444 Main Street, Any Town, USA 55555",
+    ('house00005', "userhouse5@gmail.com", "ABC001", "ABC001-02", "Mary Allen", "Cindy's Family", STR_TO_DATE('12/12/2023', '%m/%d/%Y'), "Motel66", "Motel66 on main street", "4444 Main Street, Any Town, USA 55555",
      "55555", "Y", "Married", "Associate Degree", "Never Served", "FInd the values23", "Part Time", 2, 1,  1300.00, "no kown address34", "Shanaya, 54; Julia 45",
      " boy 15", STR_TO_DATE('01/01/2023', '%m/%d/%Y'), "5555 32nd Street, Any Town, USA, 55555", "Any Town Rentals45", "Johns Creek", "Forsyth County", "55555", 1200.00,
      STR_TO_DATE('4/5/2023', '%m/%d/%Y'), "Dropped", "no impact notes for now", current_timestamp, 'Init');
 
 INSERT INTO HouseholdIntake
 VALUES
-    ("userhouse6@gmail.com", "ABC001", "ABC001-02", "Mary Allen", "Josetta's Family", STR_TO_DATE('12/12/2020', '%m/%d/%Y'), "Motel6612", "Motel6612 on main street", "4444 Main Street, Any Town, USA 55555",
+    ('house00006', "userhouse6@gmail.com", "ABC001", "ABC001-02", "Mary Allen", "Josetta's Family", STR_TO_DATE('12/12/2020', '%m/%d/%Y'), "Motel6612", "Motel6612 on main street", "4444 Main Street, Any Town, USA 55555",
      "55555", "Y", "Married", "Associate Degree", "Never Served", "FInd the values23", "Part Time", 2, 1,  1300.00, "no kown address34", "Shanaya, 54; Julia 45",
      " boy 15", STR_TO_DATE('01/01/2023', '%m/%d/%Y'), "5555 32nd Street, Any Town, USA, 55555", "Any Town Rentals45", "Johns Creek", "Forsyth County", "55555", 1200.00,
      STR_TO_DATE('4/5/2023', '%m/%d/%Y'), "In Progress", "no impact notes for now", current_timestamp, 'Init');
 
 INSERT INTO HouseholdIntake
 VALUES
-    ("userhouse5@gmail.com", "XYZ001", "XYZ001-03", "Mary Allen", "Cindy's Family", STR_TO_DATE('12/12/2023', '%m/%d/%Y'), "Motel66", "Motel66 on main street", "4444 Main Street, Any Town, USA 55555",
+    ('house00007', "userhouse5@gmail.com", "XYZ001", "XYZ001-03", "Mary Allen", "Cindy's Family", STR_TO_DATE('12/12/2023', '%m/%d/%Y'), "Motel66", "Motel66 on main street", "4444 Main Street, Any Town, USA 55555",
      "55555", "Y", "Married", "Associate Degree", "Never Served", "FInd the values23", "Part Time", 2, 1,  1300.00, "no kown address34", "Shanaya, 54; Julia 45",
      " boy 15", STR_TO_DATE('01/01/2023', '%m/%d/%Y'), "5555 32nd Street, Any Town, USA, 55555", "Any Town Rentals45", "Johns Creek", "Forsyth County", "55555", 1200.00,
      STR_TO_DATE('4/5/2023', '%m/%d/%Y'), "Dropped", "no impact notes for now", current_timestamp, 'Init');
 
 INSERT INTO HouseholdIntake
 VALUES
-    ("userhouse6@gmail.com", "XYZ001", "XYZ001-04", "Mary Allen", "Josetta's Family", STR_TO_DATE('12/12/2020', '%m/%d/%Y'), "Motel6612", "Motel6612 on main street", "4444 Main Street, Any Town, USA 55555",
+    ('house00008', "userhouse6@gmail.com", "XYZ001", "XYZ001-04", "Mary Allen", "Josetta's Family", STR_TO_DATE('12/12/2020', '%m/%d/%Y'), "Motel6612", "Motel6612 on main street", "4444 Main Street, Any Town, USA 55555",
      "55555", "Y", "Married", "Associate Degree", "Never Served", "FInd the values23", "Part Time", 2, 1,  1300.00, "no kown address34", "Shanaya, 54; Julia 45",
      " boy 15", STR_TO_DATE('01/01/2023', '%m/%d/%Y'), "5555 32nd Street, Any Town, USA, 55555", "Any Town Rentals45", "Johns Creek", "Forsyth County", "55555", 1200.00,
      STR_TO_DATE('4/5/2023', '%m/%d/%Y'), "In Progress", "no impact notes for now", current_timestamp, 'Init');

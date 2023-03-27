@@ -6,6 +6,7 @@ import {insertProgram, queryAllPrograms, queryByProgramID, queryProgramByPartner
 const handler = getHandler();
 
 // GET /api/program query all programs
+// GET /api/program?partnerID=:partnerID query all programs by PartnerID
 handler.get(async (req, res) => {
 
     let allPrograms;
