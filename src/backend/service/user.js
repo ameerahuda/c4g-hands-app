@@ -18,10 +18,21 @@ const updateUser = async (data, email) => {
     // {...data, createdBy:'', createdAt:''}
     data.createdAt = undefined;
     data.createdBy = undefined;
+    data.user_type = undefined;
+    data.password = undefined;
+    data.partnerID = undefined;
     delete data.createdBy;
-    delete data.createdAt;
+    delete data.createdBy;
+    delete data.user_type;
+    delete data.password;
+    delete data.partnerID;
 
     const user = await pool.query("Update User SET ? where email=?", [data, email]);
+    return user;
+};
+
+const updatePassword = async (password, email) => {
+    const user = await pool.query("Update User SET password=? where email=?", [password, email]);
     return user;
 };
 
@@ -75,6 +86,7 @@ export {
     decodeJWT,
     insertUser,
     updateUser,
+    updatePassword,
     queryUserByEmail,
     queryUsers
 }

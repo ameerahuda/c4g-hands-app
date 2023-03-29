@@ -1,9 +1,11 @@
 import getHandler from "@/backend/handler";
 import CustomError from "@/backend/error/CustomError";
-import {hashPassword, insertUser, queryUserByEmail} from "@/backend/service/user";
+import {hashPassword, insertUser, queryUserByEmail, updateUser} from "@/backend/service/user";
 import {queryByPartnerID} from "@/backend/service/partner-service";
 
 const handler = getHandler();
+
+const userTypeList = ["UnitedWay Staff", "Partner Staff", "Household"];
 
 handler.get(async (req, res) => {
     console.log(req.email)
@@ -21,8 +23,6 @@ handler.post(async (req, res) => {
     if (result) {
         throw new CustomError("user already exists", 401);
     }
-
-    const userTypeList = ["UnitedWay Staff", "Partner Staff", "Household"];
 
     const userCreationIndex = userTypeList.indexOf(user_type);
     if (userTypeList.indexOf(user_type) === -1) {
@@ -49,6 +49,32 @@ handler.post(async (req, res) => {
         ...req.body,
         password: saltPwd
     });
+    result = await queryUserByEmail(email);
+
+    return res.status(200).json({...result, password: null});
+});
+
+
+// PUT /api/user update user
+handler.put(async (req, res) => {
+    const {email, user_type} = req.body;
+
+    let result = await queryUserByEmail(email);
+
+    if (!result) {
+        throw new CustomError("user not exists", 404);
+    }
+
+    const userCreationIndex = userTypeList.indexOf(user_type);
+    const userLoginIndex = userTypeList.indexOf(req.user_type);
+    if (userLoginIndex !== -1 && userLoginIndex <= userCreationIndex) {
+        console.log(`User ${req.email} ${req.user_type} is updating user ${email} ${user_type}`)
+    } else {
+        throw new CustomError(`User ${req.email} ${req.user_type} cannot update user ${email} ${user_type}`, 403);
+    }
+
+    await updateUser(req.body, email);
+
     result = await queryUserByEmail(email);
 
     return res.status(200).json({...result, password: null});
