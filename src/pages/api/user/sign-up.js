@@ -1,4 +1,3 @@
-import {hashPassword, insertUser, queryUserByEmail} from "@/backend/service/user";
 import getHandler from "@/backend/handler";
 import CustomError from "@/backend/error/CustomError";
 
