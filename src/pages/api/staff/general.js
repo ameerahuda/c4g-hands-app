@@ -1,5 +1,5 @@
 import getHandler from "@/backend/handler";
-import {queryByPartnerID, queryStaffView} from "@/backend/service/partner-service";
+import {queryStaffView} from "@/backend/service/partner-service";
 import CustomError from "@/backend/error/CustomError";
 
 const handler = getHandler();
