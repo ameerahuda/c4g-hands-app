@@ -21,6 +21,7 @@ CREATE TABLE User
     gender      char(1)     NOT NULL,
     race        char(1)     NOT NULL,
     phoneNumber varchar(10) NOT NULL,
+    partnerID   varchar(10),
     createdAt   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     createdBy   varchar(50),
 
@@ -89,7 +90,7 @@ CREATE TABLE HouseholdIntake
     enrollmentDate        date          NOT NULL,
     locationEntry         varchar(10)   NOT NULL,
     motelName             varchar(50)   NULL,
-    MotelAddress          varchar(100)  NULL,
+    motelAddress          varchar(100)  NULL,
     motelZip              varchar(5)    NULL,
     haveKids              char(1)       NOT NULL,
     maritalStatus         varchar(10)   NOT NULL,
@@ -112,7 +113,7 @@ CREATE TABLE HouseholdIntake
     monthlyRent           DECIMAL(13, 2),
     graduationDT          date          NULL,
     sureImpactStatus      varchar(20)   NOT NULL,
-    SureImpactNotes       varchar(100)  NULL,
+    sureImpactNotes       varchar(100)  NULL,
     createdAt             TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     createdBy             varchar(50),
 
