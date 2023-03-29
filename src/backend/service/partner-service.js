@@ -36,20 +36,26 @@ const updatePartner = async (data, partnerID) => {
 };
 
 const queryStaffView = async () => {
-    return await pool.query("Select partner.partnerName,\n" +
+    return await pool.query("WITH tmp AS (\n" +
+        "    Select fk_Partner_partnerID,\n" +
+        "           sureImpactStatus,\n" +
+        "           count(*) countHousehold\n" +
+        "    from HouseholdIntake hh\n" +
+        "    group by fk_Partner_partnerID, sureImpactStatus\n" +
+        ")\n" +
+        "Select partner.partnerName,\n" +
         "       partner.partnerAddress,\n" +
         "       partner.partnerBudget,\n" +
-        "       count(HouseholdIntake.fk_User_email)                  as numOfHouseholds,\n" +
+        "       COUNT(HouseholdIntake.householdIntakeID)              as numOfHouseholds,\n" +
         "       SUM(programs.programBudget)                           as moneySpent,\n" +
         "       (partner.partnerBudget - SUM(programs.programBudget)) as moneyRemaining,\n" +
-        "       0                                                     as householdsCompleted,\n" +
-        "       0                                                     as householdsDropped,\n" +
-        "       0                                                     as householdsInProgres\n" +
-        "FROM Programs programs,\n" +
-        "     Partner partner,\n" +
-        "     HouseholdIntake\n" +
-        "WHERE programs.partnerID = partner.partnerID\n" +
-        "  AND HouseholdIntake.fk_Partner_partnerID = partner.partnerID");
+        "       (select countHousehold from tmp where tmp.fk_Partner_partnerID = partner.partnerID and tmp.sureImpactStatus='Completed') as householdsCompleted,\n" +
+        "       (select countHousehold from tmp where tmp.fk_Partner_partnerID = partner.partnerID and tmp.sureImpactStatus='Dropped') as householdsDropped,\n" +
+        "       (select countHousehold from tmp where tmp.fk_Partner_partnerID = partner.partnerID and tmp.sureImpactStatus='In Progress') as householdsInProgres\n" +
+        "FROM Partner partner\n" +
+        "         JOIN HouseholdIntake ON partner.partnerID = HouseholdIntake.fk_Partner_partnerID\n" +
+        "         JOIN Programs programs ON HouseholdIntake.fk_Program_programID = programs.programID\n" +
+        "GROUP BY partner.partnerID");
 };
 
 export {
