@@ -37,6 +37,9 @@ const queryUsers = async () => {
 };
 
 const hashPassword = (password) => {
+    if (!password) {
+        throw new CustomError('password undefined', 400);
+    }
     return saltedMd5(password, serverRuntimeConfig.API_SALT, false);
 };
 
