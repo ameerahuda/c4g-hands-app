@@ -1,8 +1,8 @@
 
 INSERT INTO User
-VALUES ('user1@gmail.com', 'password1', 'Atul', 'Verma', 'UnitedWay Staff', current_date, 'M', 'H', '9999999999', 'ABC001', current_timestamp, 'Init');
+VALUES ('user1@gmail.com', 'password1', 'Atul', 'Verma', 'UnitedWay Staff', current_date, 'M', 'H', '9999999999', null, current_timestamp, 'Init');
 INSERT INTO User
-VALUES ('user2@gmail.com', 'password2', 'Kiran', 'Chava', 'Partner Staff', current_date, 'F', 'W', '5555555555', 'XYZ001', current_timestamp, 'Init');
+VALUES ('user2@gmail.com', 'password2', 'Kiran', 'Chava', 'Partner Staff', current_date, 'F', 'W', '5555555555', 'ABC001', current_timestamp, 'Init');
 INSERT INTO User
 VALUES ('user3@gmail.com', 'password3', 'Ameera', 'Huda', 'Household', current_date, 'F', 'B', '4444444444', null, current_timestamp, 'Init');
 INSERT INTO User
