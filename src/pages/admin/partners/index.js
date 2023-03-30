@@ -19,11 +19,11 @@ const initialFormState = {
 export default function Partners() {
     const { 
 		isAuthenticated,
-        token
+        token,
+        user
 	} = useStateContext();
     const router = useRouter();
     const [partnerForm, setPartnerForm] = useState(initialFormState);
-	const [partnerCreated, setPartnerCreated] = useState(false);
     const [showCreatePartnerModal, setShowCreatePartnerModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -54,10 +54,16 @@ export default function Partners() {
     }, [token]);
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!isAuthenticated && !sessionStorage.getItem('user')) {
             router.push("/signin")
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated]);
+
+    useEffect(() => {
+        if (isAuthenticated && user?.user_type !== 'UnitedWay Staff') {
+            router.push("/profile")
+        }
+    }, [isAuthenticated, user]);
 
     const createPartner = async (partner) => {
         let config = {
@@ -69,8 +75,7 @@ export default function Partners() {
 
         await axios(config)
             .then((response) => {
-                setPartners([...partners, partner])
-                setPartnerCreated(true);
+                setPartners([...partners, partner]);
                 setShowCreatePartnerModal(false);
                 setPartnerForm(initialFormState);
             })
@@ -85,16 +90,16 @@ export default function Partners() {
                 // Build our expander column
                 id: "expander", // Make sure it has an ID
                 Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
-                    <span {...getToggleAllRowsExpandedProps()}>
-                    {isAllRowsExpanded ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
+                    <span className={styles.rowAction} {...getToggleAllRowsExpandedProps()}>
+                        {isAllRowsExpanded ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
                 ),
                 Cell: ({ row }) => (
                     // Use Cell to render an expander for each row.
                     // We can use the getToggleRowExpandedProps prop-getter
                     // to build the expander.
-                    <span {...row.getToggleRowExpandedProps()}>
-                    {row.isExpanded ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronRight} />}
+                    <span className={styles.rowAction} {...row.getToggleRowExpandedProps()}>
+                        {row.isExpanded ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronRight} />}
                     </span>
                 )
             },

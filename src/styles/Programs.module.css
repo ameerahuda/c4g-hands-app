@@ -10,12 +10,12 @@
     margin-top: 10rem;
 }
 
-.partnerButtons {
+.programButtons {
     display: flex;
     justify-content: space-between;
 }
 
-.partnerBtn {
+.programBtn {
     text-align: center;
     text-transform: uppercase;
     transition: 0.5s;
@@ -27,29 +27,28 @@
     background-size: 200% auto; 
     background-color: #fd9542;
     cursor: pointer;
-    margin-right: 1rem;
 }
 
-.partnerBtn:hover {
+.programBtn:hover {
     border: 1px solid #fd9542;
     color: #fd9542;
     background-color: white;
 }
 
-.partnerForm {
+.programForm {
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.partnerForm label {
+.programForm label {
     margin-bottom: 0.5rem;
     font-size: 14px;
     text-transform: uppercase;
 }
 
-.partnerForm input {
+.programForm input {
     margin-bottom: 1rem;
     border: 1px solid grey;
     background: none;
@@ -57,7 +56,7 @@
     padding: 0.5rem;
 }
 
-.partnerForm textarea {
+.programForm textarea {
     margin-bottom: 1rem;
     border: 1px solid grey;
     background: none;
@@ -65,7 +64,7 @@
     padding: 0.5rem;
 }
 
-.partnerForm button {
+.programForm button {
     text-align: center;
     text-transform: uppercase;
     transition: 0.5s;
@@ -79,27 +78,12 @@
     cursor: pointer;
 }
 
-.partnerForm button:hover {
+.programForm button:hover {
     background-position: right center;
 }
 
-.partnerForm p {
+.programForm p {
     margin-bottom: 1rem;
-}
-
-.expandedContent {
-    display: flex;
-    width: 100%; flex-wrap: wrap;
-    background-color: var(--grey-1);
-}
-
-.expandedContent span {
-    margin: 1rem 2rem;
-}
-
-.expandedHeader {
-    font-size: 13px;
-    color: var(--grey-2);
 }
 
 .rowAction {
