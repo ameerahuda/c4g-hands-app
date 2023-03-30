@@ -36,7 +36,7 @@ handler.post(async (req, res) => {
         throw new CustomError(`User ${req.email} ${req.user_type} cannot create user ${email} ${user_type}`, 403);
     }
 
-    if (userCreationIndex < 2 && !partnerID) {
+    if (userCreationIndex === 1 && !partnerID) {
         throw new CustomError(`${user_type} must be assigned with a Partner`, 400);
     }
 
