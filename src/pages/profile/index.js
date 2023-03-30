@@ -12,7 +12,7 @@ export default function Profile() {
 	} = useStateContext();
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!isAuthenticated && !sessionStorage.getItem('user')) {
             router.push("/signin")
         }
     }, [isAuthenticated]);

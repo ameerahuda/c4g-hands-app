@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -15,6 +15,10 @@ export default function NavBar() {
         user,
         logout
     } = useStateContext();
+
+    useEffect(() => {
+        setActive(pathname)
+    }, [pathname]);
 
     return (
         <header className={styles.navbar}>
@@ -48,6 +52,11 @@ export default function NavBar() {
                         {user?.user_type === 'UnitedWay Staff' &&
                             <li className={`${styles.navItem} ${active === '/admin/partners' && styles.active}`}>
                                 <Link className={styles.link} href="/admin/partners" onClick={() => {setActive('/admin/partners'); setHamburgerMenu(false)}}>View Partners</Link>
+                            </li>
+                        }
+                        {user?.user_type === 'Partner Staff' &&
+                            <li className={`${styles.navItem} ${active === '/partner/programs' && styles.active}`}>
+                                <Link className={styles.link} href="/partner/programs" onClick={() => {setActive('/partner/programs'); setHamburgerMenu(false)}}>View Programs</Link>
                             </li>
                         }
                         <li className={`${styles.navItem}`}>

@@ -19,7 +19,6 @@
 
 .tableHeader th {
     padding: 1rem 0rem;
-    text-align: left;
     text-align: center;
 }
 
@@ -28,4 +27,5 @@
     text-align: center;
     padding: 1rem 0;
     border-top: 2px solid var(--grey-1);
+    /* cursor: pointer; */
 }
