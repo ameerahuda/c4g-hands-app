@@ -44,7 +44,7 @@ handler.put(async (req, res) => {
         await updatePartner(req.body, partnerID);
         return res.status(200).json(await queryByPartnerID(partnerID));
     } else {
-        throw new CustomError(`$req.query.partnerID not found`, 404);
+        throw new CustomError(`${req.query.partnerID} not found`, 404);
     }
 });
 

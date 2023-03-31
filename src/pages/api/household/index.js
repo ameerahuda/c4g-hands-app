@@ -58,7 +58,7 @@ handler.put(async (req, res) => {
         await updateHouseholdIntake(req.body, householdIntakeID);
         return res.status(200).json(await queryByHouseholdIntakeID(householdIntakeID));
     } else {
-        throw new CustomError(`$req.query.householdIntakeID not found`, 404);
+        throw new CustomError(`${req.query.householdIntakeID} not found`, 404);
     }
 });
 
