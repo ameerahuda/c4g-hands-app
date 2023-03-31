@@ -12,7 +12,7 @@ handler.get(async (req, res) => {
     if (result) {
         return res.status(200).json({...result, password: ''});
     } else {
-        throw new CustomError(`$req.query.email not found`, 404);
+        throw new CustomError(`${req.query.email} not found`, 404);
     }
 });
 
@@ -28,7 +28,7 @@ handler.put(async (req, res) => {
         const result2 = await updateUser(req.body, req.query.email);
         return res.status(200).json({...result2});
     } else {
-        throw new CustomError(`$req.query.email not found`, 404);
+        throw new CustomError(`${req.query.email} not found`, 404);
     }
 });
 

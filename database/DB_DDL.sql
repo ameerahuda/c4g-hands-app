@@ -162,6 +162,7 @@ CREATE TABLE JourneyDetails
 
 CREATE TABLE JourneyByMonth
 (
+    journeyByMonthID varchar(10)  NOT NULL,
     fk_JourneyDetails_journeyID varchar(10)  NOT NULL,
     month                       varchar(10)  NOT NULL,
     subsidyDT                   date         NOT NULL,
@@ -176,7 +177,7 @@ CREATE TABLE JourneyByMonth
     createdAt                   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     createdBy                   varchar(50),
 
-    PRIMARY KEY (fk_JourneyDetails_journeyID, month),
+    PRIMARY KEY (journeyByMonthID),
     FOREIGN KEY (fk_JourneyDetails_journeyID) REFERENCES JourneyDetails (journeyID)
 );
 

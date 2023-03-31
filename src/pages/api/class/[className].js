@@ -11,7 +11,7 @@ handler.get(async (req, res) => {
     if (result) {
         return res.status(200).json({...result});
     } else {
-        throw new CustomError(`$req.query.className not found`, 404);
+        throw new CustomError(`${req.query.className} not found`, 404);
     }
 });
 

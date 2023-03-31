@@ -49,7 +49,7 @@ handler.put(async (req, res) => {
         await updateProgram(req.body, programID);
         return res.status(200).json(await queryByProgramID(programID));
     } else {
-        throw new CustomError(`$req.query.programID not found`, 404);
+        throw new CustomError(`${req.query.programID} not found`, 404);
     }
 });
 
