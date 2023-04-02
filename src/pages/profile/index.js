@@ -11,6 +11,13 @@ export default function Profile() {
         user
 	} = useStateContext();
 
+    const formatPhoneNumber = (value) => {
+        let val = value;
+        val = val.replace(/\D/g, '');
+        val = val.slice(0,3) + "-" + val.slice(3,6) + "-" + val.slice(6,15);
+        return val;
+    }
+
     useEffect(() => {
         if (!isAuthenticated && !sessionStorage.getItem('user')) {
             router.push("/signin")
@@ -47,7 +54,7 @@ export default function Profile() {
                     </span>
                     <span>
                         <p className={styles.acctInfoLabel}>Phone Number</p>
-                        <p className={styles.acctInfoValue}>{user.phoneNumber}</p>
+                        <p className={styles.acctInfoValue}>{formatPhoneNumber(user.phoneNumber)}</p>
                     </span>
                     <span>
                         <p className={styles.acctInfoLabel}>Race</p>

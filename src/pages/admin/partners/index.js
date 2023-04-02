@@ -190,13 +190,13 @@ export default function Partners() {
 
         csvData.push(headerRow);
         partners.forEach(item => {
-            csvData.push(Object.values(item));
+            csvData.push([item.partnerID, item.partnerName.replace(/,/g,' '), item.partnerAddress.replace(/,/g,' '), item.partnerBudget]);
         });
 
         let csvContent = '';
 
         csvData.forEach(row => {
-            csvContent += row.join(';') + '\n';
+            csvContent += row.join(',') + '\n';
         });
 
         const strToBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8,' });
