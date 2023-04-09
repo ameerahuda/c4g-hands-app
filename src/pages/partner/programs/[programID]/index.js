@@ -1,11 +1,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import styles from '@/styles/Programs.module.css';
+import styles from '@/styles/Program.module.css';
 import Table from '@/components/Table';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPencil } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight, faMinus, faPlus, faEye, faPencil } from '@fortawesome/free-solid-svg-icons'
 import Modal from '@/components/Modal';
 import { useStateContext } from '@/context/context';
 import axios from "axios";
@@ -33,254 +33,219 @@ export default function Programs() {
         user
 	} = useStateContext();
     const router = useRouter();
-    const [programForm, setProgramForm] = useState(initialFormState);
-    const [showCreateProgramModal, setShowCreateProgramModal] = useState(false);
-    const [showEditProgramModal, setShowEditProgramModal] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(true);
-    const [programs, setPrograms] = useState([]);
-    const [programToEdit, setProgramToEdit] = useState({});
+    const [program, setProgram] = useState({});
+    const [programEdit, setProgramEdit] = useState({});
+    const [showEditProgramModal, setShowEditProgramModal] = useState(false);
+    const [programHouseholds, setProgramHouseholds] = useState([]);
+    const [householdToEdit, setHouseholdToEdit] = useState({});
+    const [showEditHouseholdModal, setShowEditHouseholdModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const formatDate = (strDate) => {
+        console.log('strDate', strDate)
+        let date = new Date(strDate);
+        return date.toLocaleString().split(',')[0];
+    }
 
     const columns = useMemo(
         () => [
             {
-                Header: 'Name',
-                accessor: 'programName'
-            },
-            {
-                Header: 'Budget',
-                accessor: 'programBudget'
-            },
-            {
-                Header: 'Prehouse Months',
-                accessor: 'prehouseMonths'
-            },
-            {
-                Header: 'Posthouse Months',
-                accessor: 'posthouseMonths'
-            },
-            {
                 // Build our expander column
-                id: "view", // Make sure it has an ID
-                Header: 'View',
+                id: "expander", // Make sure it has an ID
+                Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
+                    <span className={styles.rowAction} {...getToggleAllRowsExpandedProps()}>
+                        {isAllRowsExpanded ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
+                    </span>
+                ),
                 Cell: ({ row }) => (
-                    <span className={styles.rowAction} onClick={() => openProgramPage(row.original)}>
-                        <FontAwesomeIcon icon={faEye} />
+                    // Use Cell to render an expander for each row.
+                    // We can use the getToggleRowExpandedProps prop-getter
+                    // to build the expander.
+                    <span className={styles.rowAction} {...row.getToggleRowExpandedProps()}>
+                        {row.isExpanded ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronRight} />}
                     </span>
                 )
             },
-            ,
             {
-                // Build our expander column
-                id: "edit", // Make sure it has an ID
+                Header: 'Team Member',
+                accessor: 'partnerStaffName'
+            },
+            {
+                Header: 'Email',
+                accessor: 'fk_User_email'
+            },
+            {
+                Header: 'Household Name',
+                accessor: 'householdName'
+            },
+            {
+                Header: 'Enrollment Date',
+                accessor: 'enrollmentDate',
+                Cell: ({ row }) => (
+                    <p>{formatDate(row.original.enrollmentDate)}</p>
+                )
+            },
+            // {
+            //     id: "view",
+            //     Header: 'View',
+            //     Cell: ({ row }) => (
+            //         <span className={styles.rowAction} onClick={() => openProgramPage(row.original)}>
+            //             <FontAwesomeIcon icon={faEye} />
+            //         </span>
+            //     )
+            // },
+            {
+                id: "edit", 
                 Header: 'Edit',
                 Cell: ({ row }) => (
-                    <span className={styles.rowAction} onClick={() => {setProgramToEdit(row.original); setShowEditProgramModal(true)}}>
+                    <span className={styles.rowAction} onClick={() => {setHouseholdToEdit(row.original); setShowEditHouseholdModal(true); console.log(row.original)}}>
                         <FontAwesomeIcon icon={faPencil} />
                     </span>
                 )
             },
-            // {
-            //     Header: 'Premonthly Allowance',
-            //     accessor: 'preMonthlyallownce'
-            // },
-            // {
-            //     Header: 'Postmonthly Allowance',
-            //     accessor: 'postMonthlyallowance'
-            // },
-            // {
-            //     Header: 'Moving Allowance',
-            //     accessor: 'movingAllowance'
-            // }
         ], []
     );
 
-    // const columns = useMemo(
-    //     () => [
-    //         // {
-    //         //     // Build our expander column
-    //         //     id: "expander", // Make sure it has an ID
-    //         //     Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
-    //         //         <span {...getToggleAllRowsExpandedProps()}>
-    //         //         {isAllRowsExpanded ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-    //         //         </span>
-    //         //     ),
-    //         //     Cell: ({ row }) => (
-    //         //         // Use Cell to render an expander for each row.
-    //         //         // We can use the getToggleRowExpandedProps prop-getter
-    //         //         // to build the expander.
-    //         //         <span {...row.getToggleRowExpandedProps()}>
-    //         //         {row.isExpanded ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronRight} />}
-    //         //         </span>
-    //         //     )
-    //         // },
-    //         {
-    //             Header: 'Email',
-    //             accessor: 'fk_User_email'
-    //         },
-    //         {
-    //             Header: 'Partner Staff',
-    //             accessor: 'partnerStaffName'
-    //         },
-    //         {
-    //             Header: 'Household Name',
-    //             accessor: 'householdName'
-    //         },
-    //         {
-    //             Header: 'Enrollment Date',
-    //             accessor: 'enrollmentDate'
-    //         },
-    //         {
-    //             Header: 'Location Entry',
-    //             accessor: 'locationEntry'
-    //         },
-    //         {
-    //             Header: 'Motel Name',
-    //             accessor: 'motelName'
-    //         },
-    //         {
-    //             Header: 'Motel Address',
-    //             accessor: 'MotelAddress'
-    //         },
-    //         {
-    //             Header: 'Motel Zip',
-    //             accessor: 'motelZip'
-    //         },
-    //         {
-    //             Header: 'Have Kids?',
-    //             accessor: 'haveKids'
-    //         },
-    //         {
-    //             Header: 'Marital Status',
-    //             accessor: 'maritalStatus'
-    //         },
-    //         {
-    //             Header: 'Education Status',
-    //             accessor: 'educationStatus'
-    //         },
-    //         {
-    //             Header: 'Military Status',
-    //             accessor: 'militaryStatus'
-    //         },
-    //         {
-    //             Header: 'Income Source',
-    //             accessor: 'incomeSource'
-    //         },
-    //         {
-    //             Header: 'Employment Type',
-    //             accessor: 'employmentType'
-    //         },
-    //         {
-    //             Header: '# Of Adults',
-    //             accessor: 'adultCount'
-    //         },
-    //         {
-    //             Header: '# of Kids',
-    //             accessor: 'kidsCount'
-    //         },
-    //         {
-    //             Header: 'Monthly Income',
-    //             accessor: 'monthlyIncome'
-    //         },
-    //         {
-    //             Header: 'Address',
-    //             accessor: 'address'
-    //         },
-    //         {
-    //             Header: 'Adult Name & Age',
-    //             accessor: 'adultNameAge'
-    //         },
-    //         {
-    //             Header: 'Kids Name & Age',
-    //             accessor: 'address'
-    //         },
-    //         {
-    //             Header: 'Prehousing Date',
-    //             accessor: 'prehousingDT'
-    //         },
-    //         {
-    //             Header: 'Prehousing Address',
-    //             accessor: 'prehousingAddress'
-    //         },
-    //         {
-    //             Header: 'Apt. Landlord Name',
-    //             accessor: 'apartmentLandlordName'
-    //         },
-    //         {
-    //             Header: 'Prehousing City',
-    //             accessor: 'prehouseCity'
-    //         },
-    //         {
-    //             Header: 'Prehousing County',
-    //             accessor: 'preHouseCounty'
-    //         },
-    //         {
-    //             Header: 'Prehousing Zip',
-    //             accessor: 'prehoseZip'
-    //         },
-    //         {
-    //             Header: 'Monthly Rent',
-    //             accessor: 'monthlyRent'
-    //         },
-    //         {
-    //             Header: 'Graduation Date',
-    //             accessor: 'graduationDT'
-    //         },
-    //         {
-    //             Header: 'Sure Impact Status',
-    //             accessor: 'sureImpactStatus'
-    //         },
-    //         {
-    //             Header: 'Sure Impact Notes',
-    //             accessor: 'SureImpactNotes'
-    //         },
-    //         {
-    //             // Build our expander column
-    //             id: "view", // Make sure it has an ID
-    //             Header: 'View',
-    //             Cell: ({ row }) => (
-    //                 <span className={styles.rowAction} onClick={() => openProgramPage(row.original)}>
-    //                     <FontAwesomeIcon icon={faEye} />
-    //                 </span>
-    //             )
-    //         },
-    //         ,
-    //         {
-    //             // Build our expander column
-    //             id: "edit", // Make sure it has an ID
-    //             Header: 'Edit',
-    //             Cell: ({ row }) => (
-    //                 <span className={styles.rowAction} onClick={() => {setProgramToEdit(row.original); setShowEditProgramModal(true)}}>
-    //                     <FontAwesomeIcon icon={faPencil} />
-    //                 </span>
-    //             )
-    //         },
-    //         // {
-    //         //     Header: 'Premonthly Allowance',
-    //         //     accessor: 'preMonthlyallownce'
-    //         // },
-    //         // {
-    //         //     Header: 'Postmonthly Allowance',
-    //         //     accessor: 'postMonthlyallowance'
-    //         // },
-    //         // {
-    //         //     Header: 'Moving Allowance',
-    //         //     accessor: 'movingAllowance'
-    //         // }
-    //     ], []
-    // );
+    const renderRowSubComponent = React.useCallback(
+        ({ row }) => (
+            <div className={styles.expandedContent}>
+                <span>
+                    <p className={styles.expandedHeader}>Location at Entry</p>
+                    <p>{row.original.locationEntry}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Motel Name</p>
+                    <p>{row.original.motelName}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Motel Address</p>
+                    <p>{row.original.motelAddress}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Motel Zipcode</p>
+                    <p>{row.original.motelZip}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Education</p>
+                    <p>{row.original.educationStatus}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Employment Type</p>
+                    <p>{row.original.employmentType}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Military Service</p>
+                    <p>{row.original.militaryStatus}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Marital Status</p>
+                    <p>{row.original.maritalStatus}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Income Source</p>
+                    <p>{row.original.incomeSource}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Monthly Income</p>
+                    <p>{row.original.monthlyIncome}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Have kids?</p>
+                    <p>{row.original.haveKids}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}># of Adults</p>
+                    <p>{row.original.adultCount}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}># of Kids</p>
+                    <p>{row.original.kidsCount}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Adult(s) Name/Age</p>
+                    <p>{row.original.adultNameAge}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Kid(s) Name/Age</p>
+                    <p>{row.original.kidsNameAge}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Pre-House Date</p>
+                    <p>{formatDate(row.original.prehousingDT)}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Apartment Name/Landlord</p>
+                    <p>{row.original.apartmentLandlordName}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Pre-House Address</p>
+                    <p>{row.original.prehousingAddress}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Pre-House City</p>
+                    <p>{row.original.prehouseCity}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Pre-House Zipcode</p>
+                    <p>{row.original.prehoseZip}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Pre-House County</p>
+                    <p>{row.original.preHouseCounty}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Monthly Rent</p>
+                    <p>{row.original.monthlyRent}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Graduation Date</p>
+                    <p>{formatDate(row.original.graduationDT)}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Sure Impact Status</p>
+                    <p>{row.original.sureImpactStatus}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Sure Impact Notes</p>
+                    <p>{row.original.sureImpactNotes}</p>
+                </span>
+            </div>
+        ),
+        []
+    );
 
     useEffect(() => {
-        const getPrograms = async () => {
+        const getProgramById = async () => {
+            console.log('router.query.programID', router.query.programID)
             let config = {
                 method: 'get',
-                url: `${process.env.NEXT_PUBLIC_API_URL}/program`,
+                url: `${process.env.NEXT_PUBLIC_API_URL}/program/${router.query.programID}`,
                 headers: { Authorization: `Bearer ${token}` }
             };
     
             await axios(config)
                 .then((response) => {
-                    setPrograms(response.data);
+                    console.log('response.data', response.data)
+                    setProgram(response.data);
+                    // setIsLoading(false);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
+        const getProgramHouseholds = async () => {
+            let config = {
+                method: 'get',
+                url: `${process.env.NEXT_PUBLIC_API_URL}/household?partnerID=${user.partnerID}&programID=${router.query.programID}`,
+                headers: { Authorization: `Bearer ${token}` }
+            };
+    
+            await axios(config)
+                .then((response) => {
+                    console.log('response.data', response.data)
+                    setProgramHouseholds(response.data);
                     setIsLoading(false);
                 })
                 .catch((error) => {
@@ -288,107 +253,68 @@ export default function Programs() {
                 });
         }
 
-        if (token) {
-            getPrograms();
+        if (token && router.isReady) {
+            getProgramById();
+            getProgramHouseholds();
         }
 
-    }, [token]);
+    }, [router.isReady, token]);
 
-    const createProgram = async (program) => {
-        let config = {
-            method: 'post',
-            url: `${process.env.NEXT_PUBLIC_API_URL}/program`,
-            headers: { Authorization: `Bearer ${token}` },
-            data: program
-        };
-
-        await axios(config)
-            .then((response) => {
-                setPrograms([...programs, program]);
-                setShowCreateProgramModal(false);
-                setProgramForm(initialFormState);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-
-    const editProgram = async (program) => {
+    const editProgram = async () => {
         console.log('editProgram', program)
         let config = {
             method: 'put',
             url: `${process.env.NEXT_PUBLIC_API_URL}/program`,
             headers: { Authorization: `Bearer ${token}` },
-            data: program
+            data: programEdit
         };
 
         await axios(config)
             .then((response) => {
-                let tempPrograms = [...programs];
-                let index = tempPrograms.findIndex((obj) =>  obj.programID === program.programID)
-                console.log('program before', tempPrograms[index])
-                tempPrograms[index] = program;
-                console.log('program after', tempPrograms[index])
-                setPrograms(tempPrograms);
                 setShowEditProgramModal(false);
-                setProgramToEdit({});
+                setProgram(programEdit);
             })
             .catch((error) => {
                 console.log(error);
             });
     }
 
-    useEffect(() => {
-        console.log('programs useeffect', programs)
-    }, [programs])
-
-    const handleProgramForm = () => {
-		setShowCreateProgramModal(true);
-	};
-
-    const handleFormChange = (event) => {
+    const handleEditFormChange = (event, toEdit, setToEdit) => {
         let fieldName = event.target.id;
-        setProgramForm({...programForm , [fieldName]: event.target.value})
+        setToEdit({...toEdit , [fieldName]: event.target.value})
     }
 
-    const handleEditFormChange = (event) => {
-        let fieldName = event.target.id;
-        setProgramToEdit({...programToEdit , [fieldName]: event.target.value})
-    }
-
-    // const validateForm = (programForm) => {
-    //     let valid = true;
-
-    //     if (programForm.programName.length === 0) {
-    //         valid = false;
-    //     } else if (programForm.programAddress.length === 0) {
-    //         valid = false;
-    //     } else if (programForm.programBudget < 0) {
-    //         valid = false;
-    //         setErrorMessage('Budget cannot be less than 0.')
-    //     }
-
-    //     return valid;
-    // }
-
-    const handleProgramCreated = (event) => {
+    const handleProgramEdited = (event) => {
 	    event.preventDefault();
-	    // Save program details here
-
-        // if (validateForm()) {
-        createProgram(programForm)
-        // }
+        editProgram(programEdit)
   	};
 
-      const handleProgramEdited = (event) => {
+      const handleHouseholdEdited = async (event) => {
 	    event.preventDefault();
-	    // Save program details here
+        console.log('handleHouseholdEdited', householdToEdit)
+        let config = {
+            method: 'put',
+            url: `${process.env.NEXT_PUBLIC_API_URL}/household`,
+            headers: { Authorization: `Bearer ${token}` },
+            data: householdToEdit
+        };
 
-        // if (validateForm()) {
-        editProgram(programToEdit)
-        // }
+        await axios(config)
+            .then((response) => {
+                let tempHouseholds = [...programHouseholds];
+                let index = tempHouseholds.findIndex((obj) =>  obj.householdIntakeID === householdToEdit.householdIntakeID)
+                console.log('tempHouseholds before', tempHouseholds[index])
+                tempHouseholds[index] = householdToEdit;
+                console.log('tempHouseholds after', tempHouseholds[index])
+                setProgramHouseholds(tempHouseholds);
+                setShowEditHouseholdModal(false);
+                setHouseholdToEdit({});
+            })
+            .catch((error) => {
+                console.log(error);
+            });
   	};
-
+    
     useEffect(() => {
         if (!isAuthenticated && !sessionStorage.getItem('user')) {
             router.push("/signin")
@@ -401,9 +327,17 @@ export default function Programs() {
         }
     }, [isAuthenticated, user]);
 
-    useEffect(() => {
-        console.log('router.query', JSON.parse(router.query.program))
-    }, [router.query]);
+    function formatDateForInput(str) {
+        let date = new Date(str);
+        var yyyy = date.getFullYear().toString();
+        var mm = (date.getMonth()+1).toString();
+        var dd  = date.getDate().toString();
+
+        var mmChars = mm.split('');
+        var ddChars = dd.split('');
+
+        return yyyy + '-' + (mmChars[1]?mm:"0"+mmChars[0]) + '-' + (ddChars[1]?dd:"0"+ddChars[0]);
+    }
 
     return isAuthenticated && !isLoading && (
         <>
@@ -415,29 +349,81 @@ export default function Programs() {
             </Head>
             <main className={styles.main}>
                 <div className={styles.header}></div>
-                <div className={styles.programButtons}>
-                    <button className={styles.programBtn} onClick={handleProgramForm}>Create Program</button>
+                <div className={styles.programHeader}>
+                    <p className={styles.programName}>{program?.programName}</p>
+                    <button className={styles.programBtn} onClick={() => {setProgramEdit(program); setShowEditProgramModal(true)}}>Edit Program</button>
                 </div>
-
+                <div className={styles.programContainer}>
+                    <span>
+                        <p className={styles.containerHeader}>Program Budget</p>
+                        <p>$ {program?.programBudget}</p>
+                    </span>
+                    <span>
+                        <p className={styles.containerHeader}>Moving Allowance</p>
+                        <p>$ {program?.movingAllowance}</p>
+                    </span>
+                    <span>
+                        <p className={styles.containerHeader}>Pre-House Months</p>
+                        <p>{program?.prehouseMonths}</p>
+                    </span>
+                    <span>
+                        <p className={styles.containerHeader}>Post-House Months</p>
+                        <p>{program?.posthouseMonths}</p>
+                    </span>
+                    <span>
+                        <p className={styles.containerHeader}>Pre-Monthly Allowance</p>
+                        <p>$ {program?.preMonthlyallownce}</p>
+                    </span>
+                    <span>
+                        <p className={styles.containerHeader}>Post-Monthly Allowance</p>
+                        <p>$ {program?.postMonthlyallowance}</p>
+                    </span>
+                </div>
+                <div className={styles.programContainer}>
+                    <span>
+                        <p className={styles.containerHeader}>Requirement 1</p>
+                        <p>{program?.req1}</p>
+                    </span>
+                    <span>
+                        <p className={styles.containerHeader}>Requirement 2</p>
+                        <p>{program?.req2}</p>
+                    </span>
+                    <span>
+                        <p className={styles.containerHeader}>Requirement 3</p>
+                        <p>{program?.req3}</p>
+                    </span>
+                    <span>
+                        <p className={styles.containerHeader}>Requirement 4</p>
+                        <p>{program?.req4}</p>
+                    </span>
+                    <span>
+                        <p className={styles.containerHeader}>Requirement 5</p>
+                        <p>{program?.req5}</p>
+                    </span>
+                    <span>
+                        <p className={styles.containerHeader}>Requirement 6</p>
+                        <p>{program?.req6}</p>
+                    </span>
+                </div>
                 <Table
                     tableColumns={columns}
-                    tableData={programs}
-                    // renderRowSubComponent={renderRowSubComponent}
+                    tableData={programHouseholds}
+                    renderRowSubComponent={renderRowSubComponent}
                 />
 
-                {/* <Modal 
-                    isOpen={showCreateProgramModal}
-                    header='Create Program'
-                    handleClose={() => {setShowCreateProgramModal(false); setProgramForm(initialFormState);}}
+                <Modal 
+                    isOpen={showEditProgramModal}
+                    header='Edit Program'
+                    handleClose={() => {setShowEditProgramModal(false)}}
                 >
-                    <form className={styles.programForm} onSubmit={handleProgramCreated}>
+                    <form className={styles.programForm} onSubmit={handleProgramEdited}>
                         <label htmlFor="programName">Program Name</label>
                         <input
                             type="text"
                             id="programName"
                             name="programName"
-                            value={programForm.programName}
-                            onChange={handleFormChange}
+                            value={programEdit?.programName}
+                            onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
 
@@ -446,8 +432,8 @@ export default function Programs() {
                             type="number"
                             id="programBudget"
                             name="programBudget"
-                            value={programForm.programBudget}
-                            onChange={handleFormChange}
+                            value={programEdit?.programBudget}
+                            onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
 
@@ -456,8 +442,8 @@ export default function Programs() {
                             type="number"
                             id="prehouseMonths"
                             name="prehouseMonths"
-                            value={programForm.prehouseMonths}
-                            onChange={handleFormChange}
+                            value={programEdit?.prehouseMonths}
+                            onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
 
@@ -466,8 +452,8 @@ export default function Programs() {
                             type="number"
                             id="posthouseMonths"
                             name="posthouseMonths"
-                            value={programForm.posthouseMonths}
-                            onChange={handleFormChange}
+                            value={programEdit?.posthouseMonths}
+                            onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
 
@@ -476,8 +462,8 @@ export default function Programs() {
                             type="number"
                             id="preMonthlyallownce"
                             name="preMonthlyallownce"
-                            value={programForm.preMonthlyallownce}
-                            onChange={handleFormChange}
+                            value={programEdit?.preMonthlyallownce}
+                            onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
 
@@ -486,8 +472,8 @@ export default function Programs() {
                             type="number"
                             id="postMonthlyallowance"
                             name="postMonthlyallowance"
-                            value={programForm.postMonthlyallowance}
-                            onChange={handleFormChange}
+                            value={programEdit?.postMonthlyallowance}
+                            onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
 
@@ -496,8 +482,8 @@ export default function Programs() {
                             type="number"
                             id="movingAllowance"
                             name="movingAllowance"
-                            value={programForm.movingAllowance}
-                            onChange={handleFormChange}
+                            value={programEdit?.movingAllowance}
+                            onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
 
@@ -505,8 +491,8 @@ export default function Programs() {
                         <textarea
                             id="req1"
                             name="req1"
-                            value={programForm.req1}
-                            onChange={handleFormChange}
+                            value={programEdit?.req1}
+                            onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
 
@@ -514,8 +500,8 @@ export default function Programs() {
                         <textarea
                             id="req2"
                             name="req2"
-                            value={programForm.req2}
-                            onChange={handleFormChange}
+                            value={programEdit?.req2}
+                            onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
 
@@ -523,8 +509,8 @@ export default function Programs() {
                         <textarea
                             id="req3"
                             name="req3"
-                            value={programForm.req3}
-                            onChange={handleFormChange}
+                            value={programEdit?.req3}
+                            onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
 
@@ -532,8 +518,8 @@ export default function Programs() {
                         <textarea
                             id="req4"
                             name="req4"
-                            value={programForm.req4}
-                            onChange={handleFormChange}
+                            value={programEdit?.req4}
+                            onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
 
@@ -541,8 +527,8 @@ export default function Programs() {
                         <textarea
                             id="req5"
                             name="req5"
-                            value={programForm.req5}
-                            onChange={handleFormChange}
+                            value={programEdit?.req5}
+                            onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
 
@@ -550,8 +536,8 @@ export default function Programs() {
                         <textarea
                             id="req6"
                             name="req6"
-                            value={programForm.req6}
-                            onChange={handleFormChange}
+                            value={programEdit?.req6}
+                            onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
                         {errorMessage && <p>{errorMessage}</p>}
@@ -560,138 +546,267 @@ export default function Programs() {
                 </Modal>
 
                 <Modal 
-                    isOpen={showEditProgramModal}
-                    header='Edit Program'
-                    handleClose={() => {setShowEditProgramModal(false); setProgramToEdit({});}}
+                    isOpen={showEditHouseholdModal}
+                    header='Edit Household'
+                    handleClose={() => {setShowEditHouseholdModal(false); setHouseholdToEdit({});}}
                 >
-                    <form className={styles.programForm} onSubmit={handleProgramEdited}>
-                        <label htmlFor="programName">Program Name</label>
+                    <form className={styles.programForm} onSubmit={handleHouseholdEdited}>
+                        <label htmlFor="partnerStaffName">Team Member</label>
                         <input
                             type="text"
-                            id="programName"
-                            name="programName"
-                            value={programToEdit.programName}
-                            onChange={handleEditFormChange}
+                            id="partnerStaffName"
+                            name="partnerStaffName"
+                            value={householdToEdit?.partnerStaffName}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
-
-                        <label htmlFor="programBudget">Budget</label>
+                        <label htmlFor="householdName">Household Name</label>
                         <input
-                            type="number"
-                            id="programBudget"
-                            name="programBudget"
-                            value={programToEdit.programBudget}
-                            onChange={handleEditFormChange}
+                            type="text"
+                            id="householdName"
+                            name="householdName"
+                            value={householdToEdit?.householdName}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
-
-                        <label htmlFor="prehouseMonths">Pre-house Months</label>
+                        <label htmlFor="enrollmentDate">Enrollment Date</label>
                         <input
-                            type="number"
-                            id="prehouseMonths"
-                            name="prehouseMonths"
-                            value={programToEdit.prehouseMonths}
-                            onChange={handleEditFormChange}
+                            type="date"
+                            id="enrollmentDate"
+                            name="enrollmentDate"
+                            value={formatDateForInput(householdToEdit?.enrollmentDate)}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
-
-                        <label htmlFor="posthouseMonths">Post-house Months</label>
+                        <label htmlFor="locationEntry">Location at Entry</label>
                         <input
-                            type="number"
-                            id="posthouseMonths"
-                            name="posthouseMonths"
-                            value={programToEdit.posthouseMonths}
-                            onChange={handleEditFormChange}
+                            type="text"
+                            id="locationEntry"
+                            name="locationEntry"
+                            value={householdToEdit?.locationEntry}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
-
-                        <label htmlFor="preMonthlyallownce">Pre-monthly Allowance</label>
+                        <label htmlFor="motelName">Motel Name</label>
                         <input
-                            type="number"
-                            id="preMonthlyallownce"
-                            name="preMonthlyallownce"
-                            value={programToEdit.preMonthlyallownce}
-                            onChange={handleEditFormChange}
+                            type="text"
+                            id="motelName"
+                            name="motelName"
+                            value={householdToEdit?.motelName}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
-
-                        <label htmlFor="postMonthlyallowance">Post-monthly Allowance</label>
+                        <label htmlFor="motelAddress">Motel Address</label>
                         <input
-                            type="number"
-                            id="postMonthlyallowance"
-                            name="postMonthlyallowance"
-                            value={programToEdit.postMonthlyallowance}
-                            onChange={handleEditFormChange}
+                            type="text"
+                            id="motelAddress"
+                            name="motelAddress"
+                            value={householdToEdit?.motelAddress}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
-
-                        <label htmlFor="movingAllowance">Moving Allowance</label>
+                        <label htmlFor="motelZip">Motel Zipcode</label>
                         <input
-                            type="number"
-                            id="movingAllowance"
-                            name="movingAllowance"
-                            value={programToEdit.movingAllowance}
-                            onChange={handleEditFormChange}
+                            type="text"
+                            id="motelZip"
+                            name="motelZip"
+                            value={householdToEdit?.motelZip}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
-
-                        <label htmlFor="req1">Requirement 1</label>
-                        <textarea
-                            id="req1"
-                            name="req1"
-                            value={programToEdit.req1}
-                            onChange={handleEditFormChange}
+                        <label htmlFor="educationStatus">Education</label>
+                        <input
+                            type="text"
+                            id="educationStatus"
+                            name="educationStatus"
+                            value={householdToEdit?.educationStatus}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
-
-                        <label htmlFor="req2">Requirement 2</label>
-                        <textarea
-                            id="req2"
-                            name="req2"
-                            value={programToEdit.req2}
-                            onChange={handleEditFormChange}
+                        <label htmlFor="employmentType">Employment Type</label>
+                        <input
+                            type="text"
+                            id="employmentType"
+                            name="employmentType"
+                            value={householdToEdit?.employmentType}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
-
-                        <label htmlFor="req3">Requirement 3</label>
-                        <textarea
-                            id="req3"
-                            name="req3"
-                            value={programToEdit.req3}
-                            onChange={handleEditFormChange}
+                        <label htmlFor="militaryStatus">Military Service</label>
+                        <input
+                            type="text"
+                            id="militaryStatus"
+                            name="militaryStatus"
+                            value={householdToEdit?.militaryStatus}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
-
-                        <label htmlFor="req4">Requirement 4</label>
-                        <textarea
-                            id="req4"
-                            name="req4"
-                            value={programToEdit.req4}
-                            onChange={handleEditFormChange}
+                        <label htmlFor="maritalStatus">Marital Status</label>
+                        <input
+                            type="text"
+                            id="maritalStatus"
+                            name="maritalStatus"
+                            value={householdToEdit?.maritalStatus}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
-
-                        <label htmlFor="req5">Requirement 5</label>
-                        <textarea
-                            id="req5"
-                            name="req5"
-                            value={programToEdit.req5}
-                            onChange={handleEditFormChange}
+                        <label htmlFor="incomeSource">Income Source</label>
+                        <input
+                            type="text"
+                            id="incomeSource"
+                            name="incomeSource"
+                            value={householdToEdit?.incomeSource}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
-
-                        <label htmlFor="req6">Requirement 6</label>
-                        <textarea
-                            id="req6"
-                            name="req6"
-                            value={programToEdit.req6}
-                            onChange={handleEditFormChange}
+                        <label htmlFor="monthlyIncome">Monthly Income</label>
+                        <input
+                            type="text"
+                            id="monthlyIncome"
+                            name="monthlyIncome"
+                            value={householdToEdit?.monthlyIncome}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="haveKids">Have kids?</label>
+                        <input
+                            type="text"
+                            id="haveKids"
+                            name="haveKids"
+                            value={householdToEdit?.haveKids}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="adultCount"># of Adults</label>
+                        <input
+                            type="text"
+                            id="adultCount"
+                            name="adultCount"
+                            value={householdToEdit?.adultCount}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="kidsCount"># of Kids</label>
+                        <input
+                            type="text"
+                            id="kidsCount"
+                            name="kidsCount"
+                            value={householdToEdit?.kidsCount}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="adultNameAge">Adult(s) Name/Age</label>
+                        <input
+                            type="text"
+                            id="adultNameAge"
+                            name="adultNameAge"
+                            value={householdToEdit?.adultNameAge}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="kidsNameAge">Kid(s) Name/Age</label>
+                        <input
+                            type="text"
+                            id="kidsNameAge"
+                            name="kidsNameAge"
+                            value={householdToEdit?.kidsNameAge}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="prehousingDT">Pre-House Date</label>
+                        <input
+                            type="date"
+                            id="prehousingDT"
+                            name="prehousingDT"
+                            value={formatDateForInput(householdToEdit?.prehousingDT)}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="apartmentLandlordName">Apartment Name/Landlord</label>
+                        <input
+                            type="text"
+                            id="apartmentLandlordName"
+                            name="apartmentLandlordName"
+                            value={householdToEdit?.apartmentLandlordName}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="prehousingAddress">Pre-House Address</label>
+                        <input
+                            type="text"
+                            id="prehousingAddress"
+                            name="prehousingAddress"
+                            value={householdToEdit?.prehousingAddress}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="prehouseCity">Pre-House City</label>
+                        <input
+                            type="text"
+                            id="prehouseCity"
+                            name="prehouseCity"
+                            value={householdToEdit?.prehouseCity}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="prehoseZip">Pre-House Zipcode</label>
+                        <input
+                            type="text"
+                            id="prehoseZip"
+                            name="prehoseZip"
+                            value={householdToEdit?.prehoseZip}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="preHouseCounty">Pre-House County</label>
+                        <input
+                            type="text"
+                            id="preHouseCounty"
+                            name="preHouseCounty"
+                            value={householdToEdit?.preHouseCounty}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="monthlyRent">Monthly Rent</label>
+                        <input
+                            type="text"
+                            id="monthlyRent"
+                            name="monthlyRent"
+                            value={householdToEdit?.monthlyRent}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="graduationDT">Graduation Date</label>
+                        <input
+                            type="date"
+                            id="graduationDT"
+                            name="graduationDT"
+                            value={formatDateForInput(householdToEdit?.graduationDT)}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="sureImpactStatus">Sure Impact Status</label>
+                        <input
+                            type="text"
+                            id="sureImpactStatus"
+                            name="sureImpactStatus"
+                            value={householdToEdit?.sureImpactStatus}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        />
+                        <label htmlFor="sureImpactNotes">Sure Impact Status</label>
+                        <input
+                            type="text"
+                            id="sureImpactNotes"
+                            name="sureImpactNotes"
+                            value={householdToEdit?.sureImpactNotes}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
                         {errorMessage && <p>{errorMessage}</p>}
                         <button type="submit">Save</button>
                     </form>
-                </Modal> */}
+                </Modal>
             </main>
         </>
     )

@@ -3,20 +3,25 @@
     flex-direction: column;
     min-height: 100vh;
     font-family: var(--font-family);
-    margin: 0 3rem;
+    margin: 0 3rem 2rem 3rem;
 }
 
 .header {
     margin-top: 10rem;
 }
 
-.partnerButtons {
+.programHeader {
     display: flex;
-    align-self: center;
-    margin-bottom: 2rem;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
-.partnerBtn {
+.programName {
+    font-size: 25px;
+}
+
+.programBtn {
     text-align: center;
     text-transform: uppercase;
     transition: 0.5s;
@@ -28,70 +33,44 @@
     background-size: 200% auto; 
     background-color: #fd9542;
     cursor: pointer;
-    margin-right: 1rem;
 }
 
-.partnerBtn:hover {
+.programBtn:hover {
     border: 1px solid #fd9542;
     color: #fd9542;
     background-color: white;
 }
 
-.partnerForm {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.partnerForm label {
-    margin-bottom: 0.5rem;
-    font-size: 14px;
-    text-transform: uppercase;
-}
-
-.partnerForm input {
-    margin-bottom: 1rem;
-    border: 1px solid grey;
-    background: none;
-    outline: none;
-    padding: 0.5rem;
-}
-
-.partnerForm textarea {
-    margin-bottom: 1rem;
-    border: 1px solid grey;
-    background: none;
-    outline: none;
-    padding: 0.5rem;
-}
-
-.partnerForm button {
-    text-align: center;
-    text-transform: uppercase;
-    transition: 0.5s;
-    color: white;
-    font-weight: 600;
-    border: none;
-    width: 15rem;
-    padding: 0.8rem;
-    background-size: 200% auto; 
-    background-image: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 51%, #a1c4fd 100%);
-    cursor: pointer;
-}
-
-.partnerForm button:hover {
-    background-position: right center;
-}
-
-.partnerForm p {
-    margin-bottom: 1rem;
-}
-
-.expandedContent {
+.programContainer {
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    box-shadow:  0 10px 27px rgba(0, 0, 0, 0.1);
     display: flex;
     width: 100%; 
     flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.programContainer span {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 1rem;
+    padding: 1rem;
+    border-bottom: 2px solid var(--grey-1);
+}
+
+.programContainer span {
+    font-size: 14px;
+}
+
+.containerHeader {
+    font-weight: 600;
+}
+
+.expandedContent {
+    display: grid;
+    width: 100%; 
+    grid-template-columns: 1fr 1fr;
     background-color: var(--grey-1);
 }
 
@@ -106,4 +85,55 @@
 
 .rowAction {
     cursor: pointer;
+}
+
+.programForm {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.programForm label {
+    margin-bottom: 0.5rem;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.programForm input {
+    margin-bottom: 1rem;
+    border: 1px solid grey;
+    background: none;
+    outline: none;
+    padding: 0.5rem;
+}
+
+.programForm textarea {
+    margin-bottom: 1rem;
+    border: 1px solid grey;
+    background: none;
+    outline: none;
+    padding: 0.5rem;
+}
+
+.programForm button {
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    color: white;
+    font-weight: 600;
+    border: none;
+    width: 15rem;
+    padding: 0.8rem;
+    background-size: 200% auto; 
+    background-image: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 51%, #a1c4fd 100%);
+    cursor: pointer;
+}
+
+.programForm button:hover {
+    background-position: right center;
+}
+
+.programForm p {
+    margin-bottom: 1rem;
 }
