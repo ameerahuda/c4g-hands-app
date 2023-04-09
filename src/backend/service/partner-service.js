@@ -52,9 +52,9 @@ const queryStaffView = async () => {
         "       (select countHousehold from tmp where tmp.fk_Partner_partnerID = partner.partnerID and tmp.sureImpactStatus='Completed') as householdsCompleted,\n" +
         "       (select countHousehold from tmp where tmp.fk_Partner_partnerID = partner.partnerID and tmp.sureImpactStatus='Dropped') as householdsDropped,\n" +
         "       (select countHousehold from tmp where tmp.fk_Partner_partnerID = partner.partnerID and tmp.sureImpactStatus='In Progress') as householdsInProgres\n" +
-        "FROM Partner partner\n" +
-        "         JOIN HouseholdIntake ON partner.partnerID = HouseholdIntake.fk_Partner_partnerID\n" +
-        "         JOIN Programs programs ON HouseholdIntake.fk_Program_programID = programs.programID\n" +
+        "   FROM Partner partner\n" +
+        "   LEFT JOIN HouseholdIntake ON partner.partnerID = HouseholdIntake.fk_Partner_partnerID\n" +
+        "   LEFT JOIN Programs programs ON HouseholdIntake.fk_Program_programID = programs.programID\n" +
         "GROUP BY partner.partnerID");
 };
 
