@@ -33,7 +33,7 @@ export default function Partners() {
         const getPartners = async () => {
             let config = {
                 method: 'get',
-                url: `${process.env.NEXT_PUBLIC_API_URL}/partner`,
+                url: `${process.env.NEXT_PUBLIC_API_URL}/staff/general`,
                 headers: { Authorization: `Bearer ${token}` }
             };
     
@@ -143,7 +143,7 @@ export default function Partners() {
                 </span>
                 <span>
                     <p className={styles.expandedHeader}>Households In Progress</p>
-                    <p>{row.original.householdsInProgress}</p>
+                    <p>{row.original.householdsInProgres}</p>
                 </span>
             </div>
         ),

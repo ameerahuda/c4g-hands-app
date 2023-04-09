@@ -5,10 +5,11 @@ import styles from '@/styles/Programs.module.css';
 import Table from '@/components/Table';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPencil } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight, faMinus, faPlus, faEye, faPencil } from '@fortawesome/free-solid-svg-icons'
 import Modal from '@/components/Modal';
 import { useStateContext } from '@/context/context';
 import axios from "axios";
+import Link from 'next/link';
 
 const initialFormState = {
     programName: '',
@@ -44,6 +45,23 @@ export default function Programs() {
     const columns = useMemo(
         () => [
             {
+                // Build our expander column
+                id: "expander", // Make sure it has an ID
+                Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
+                    <span className={styles.rowAction} {...getToggleAllRowsExpandedProps()}>
+                        {isAllRowsExpanded ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
+                    </span>
+                ),
+                Cell: ({ row }) => (
+                    // Use Cell to render an expander for each row.
+                    // We can use the getToggleRowExpandedProps prop-getter
+                    // to build the expander.
+                    <span className={styles.rowAction} {...row.getToggleRowExpandedProps()}>
+                        {row.isExpanded ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronRight} />}
+                    </span>
+                )
+            },
+            {
                 Header: 'Name',
                 accessor: 'programName'
             },
@@ -59,16 +77,23 @@ export default function Programs() {
                 Header: 'Posthouse Months',
                 accessor: 'posthouseMonths'
             },
-            // {
-            //     // Build our expander column
-            //     id: "view", // Make sure it has an ID
-            //     Header: 'View',
-            //     Cell: ({ row }) => (
-            //         <span className={styles.rowAction} onClick={() => openProgramPage(row.original)}>
-            //             <FontAwesomeIcon icon={faEye} />
-            //         </span>
-            //     )
-            // },
+            {
+                // Build our expander column
+                id: "view", // Make sure it has an ID
+                Header: 'View',
+                Cell: ({ row }) => (
+                    <Link
+                        href={{
+                        pathname: `/partner/programs/${row.original.programID}`,
+                        query: { program: JSON.stringify(row.original) },
+                        }} as={`/partner/programs/${row.original.programID}`}
+                    >
+                        <span className={styles.rowAction}>
+                            <FontAwesomeIcon icon={faEye} />
+                        </span>
+                    </Link>
+                )
+            },
             {
                 // Build our expander column
                 id: "edit", // Make sure it has an ID
@@ -78,27 +103,35 @@ export default function Programs() {
                         <FontAwesomeIcon icon={faPencil} />
                     </span>
                 )
-            },
-            // {
-            //     Header: 'Premonthly Allowance',
-            //     accessor: 'preMonthlyallownce'
-            // },
-            // {
-            //     Header: 'Postmonthly Allowance',
-            //     accessor: 'postMonthlyallowance'
-            // },
-            // {
-            //     Header: 'Moving Allowance',
-            //     accessor: 'movingAllowance'
-            // }
+            }
         ], []
     );
 
+    const renderRowSubComponent = React.useCallback(
+        ({ row }) => (
+            <div className={styles.expandedContent}>
+                <span>
+                    <p className={styles.expandedHeader}>Premonthly Allowance</p>
+                    <p>{row.original.preMonthlyallownce}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Postmonthly Allowance</p>
+                    <p>{row.original.postMonthlyallowance}</p>
+                </span>
+                <span>
+                    <p className={styles.expandedHeader}>Moving Allowance</p>
+                    <p>{row.original.movingAllowance}</p>
+                </span>
+            </div>
+        ),
+        []
+    );
+    
     useEffect(() => {
         const getPrograms = async () => {
             let config = {
                 method: 'get',
-                url: `${process.env.NEXT_PUBLIC_API_URL}/program`,
+                url: `${process.env.NEXT_PUBLIC_API_URL}/program?partnerID=${user.partnerID}`,
                 headers: { Authorization: `Bearer ${token}` }
             };
     
@@ -138,7 +171,6 @@ export default function Programs() {
     }
 
     const editProgram = async (program) => {
-        console.log('editProgram', program)
         let config = {
             method: 'put',
             url: `${process.env.NEXT_PUBLIC_API_URL}/program`,
@@ -150,9 +182,7 @@ export default function Programs() {
             .then((response) => {
                 let tempPrograms = [...programs];
                 let index = tempPrograms.findIndex((obj) =>  obj.programID === program.programID)
-                console.log('program before', tempPrograms[index])
                 tempPrograms[index] = program;
-                console.log('program after', tempPrograms[index])
                 setPrograms(tempPrograms);
                 setShowEditProgramModal(false);
                 setProgramToEdit({});
@@ -160,15 +190,6 @@ export default function Programs() {
             .catch((error) => {
                 console.log(error);
             });
-    }
-
-    const openProgramPage = (program) => {
-        console.log('openProgramPage', program)
-        router.push({
-            pathname: `/partner/programs/${program.programID}`,
-            query: { program: JSON.stringify(program) },
-        }, `/partner/programs/${program.programID}`);
-        // router.push(`/partner/programs/${program.programID}`);
     }
 
     const handleProgramForm = () => {
@@ -184,38 +205,14 @@ export default function Programs() {
         let fieldName = event.target.id;
         setProgramToEdit({...programToEdit , [fieldName]: event.target.value})
     }
-
-    // const validateForm = (programForm) => {
-    //     let valid = true;
-
-    //     if (programForm.programName.length === 0) {
-    //         valid = false;
-    //     } else if (programForm.programAddress.length === 0) {
-    //         valid = false;
-    //     } else if (programForm.programBudget < 0) {
-    //         valid = false;
-    //         setErrorMessage('Budget cannot be less than 0.')
-    //     }
-
-    //     return valid;
-    // }
-
     const handleProgramCreated = (event) => {
 	    event.preventDefault();
-	    // Save program details here
-
-        // if (validateForm()) {
         createProgram(programForm)
-        // }
   	};
 
       const handleProgramEdited = (event) => {
 	    event.preventDefault();
-	    // Save program details here
-
-        // if (validateForm()) {
         editProgram(programToEdit)
-        // }
   	};
 
     useEffect(() => {
@@ -247,7 +244,7 @@ export default function Programs() {
                 <Table
                     tableColumns={columns}
                     tableData={programs}
-                    // renderRowSubComponent={renderRowSubComponent}
+                    renderRowSubComponent={renderRowSubComponent}
                 />
 
                 <Modal 

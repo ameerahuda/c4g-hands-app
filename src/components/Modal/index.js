@@ -13,26 +13,12 @@ const Modal = ({ header, isOpen, handleClose, children }) => {
                 <div className={styles.modalHeader}>
                     <h5 className={styles.heading}>{header}</h5>
                     <button className={styles.closeBtn} onClick={handleClose}>
-                        {/* <RiCloseLine style={{ marginBottom: "-3px" }} /> */}
                         <FontAwesomeIcon icon={faX} />
                     </button>
                 </div>
                 <div className={styles.modalContent}>
                     {children}
                 </div>
-                {/* <div className={styles.modalActions}>
-                    <div className={styles.actionsContainer}>
-                    <button className={styles.deleteBtn} onClick={() => setIsOpen(false)}>
-                        Delete
-                    </button>
-                    <button
-                        className={styles.cancelBtn}
-                        onClick={() => setIsOpen(false)}
-                    >
-                        Cancel
-                    </button>
-                    </div>
-                </div> */}
                 </div>
             </div>
         </div>

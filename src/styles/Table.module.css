@@ -1,14 +1,14 @@
 .table {
     /* display: flex; */
-    margin: 1rem;
+    /* margin: 1rem; */
 }
 
 .tableContainer {
-    margin: 1rem;
+    /* margin: 1rem; */
     flex-direction: column;
     border-radius: 8px;
     box-shadow:  0 10px 27px rgba(0, 0, 0, 0.1);
-    width: 95vw;
+    width: 100%;
     border-collapse: collapse;
 }
 
