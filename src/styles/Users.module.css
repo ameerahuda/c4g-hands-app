@@ -1,0 +1,103 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    font-family: var(--font-family);
+}
+
+.header {
+    margin-top: 10rem;
+}
+
+.userButtons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.userBtn {
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    color: white;
+    font-weight: 600;
+    border: none;
+    width: 15rem;
+    padding: 0.8rem;
+    background-size: 200% auto; 
+    background-color: #fd9542;
+    cursor: pointer;
+    margin-right: 1rem;
+}
+
+.userBtn:hover {
+    border: 1px solid #fd9542;
+    color: #fd9542;
+    background-color: white;
+}
+
+.userForm {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.userForm label {
+    margin-bottom: 0.5rem;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.userForm input {
+    margin-bottom: 1rem;
+    border: 1px solid grey;
+    background: none;
+    outline: none;
+    padding: 0.5rem;
+}
+
+.userForm textarea {
+    margin-bottom: 1rem;
+    border: 1px solid grey;
+    background: none;
+    outline: none;
+    padding: 0.5rem;
+}
+
+.userForm button {
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    color: white;
+    font-weight: 600;
+    border: none;
+    width: 15rem;
+    padding: 0.8rem;
+    background-size: 200% auto; 
+    background-image: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 51%, #a1c4fd 100%);
+    cursor: pointer;
+}
+
+.userForm button:hover {
+    background-position: right center; /* change the direction of the change here */
+}
+
+.userForm p {
+    margin-bottom: 1rem;
+}
+
+.expandedContent {
+    display: flex;
+    width: 100%; flex-wrap: wrap;
+    background-color: var(--grey-1);
+}
+
+.expandedContent span {
+    margin: 1rem 2rem;
+}
+
+.expandedHeader {
+    font-size: 13px;
+    color: var(--grey-2);
+}
