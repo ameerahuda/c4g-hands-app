@@ -2,7 +2,7 @@ import getHandler from "@/backend/handler";
 import {
     insertHouseholdIntake,
     queryAllHouseholdIntake,
-    queryByHouseholdIntakeID,
+    queryByHouseholdIntakeID, queryHouseholdIntakeByEmail,
     queryHouseholdIntakeByPartnerAndProgram,
     updateHouseholdIntake
 } from "@/backend/service/household";
@@ -13,11 +13,14 @@ const handler = getHandler();
 
 // GET /api/household query all householdIntakes
 // GET /api/household?partnerID=:partnerID&programID=:programID query all householdIntakes by PartnerID & programID
+// GET /api/household?email=:email query householdIntake by email
 handler.get(async (req, res) => {
 
     let result;
     if (req.query && (req.query.partnerID || req.query.programID))
         result = await queryHouseholdIntakeByPartnerAndProgram(req.query.partnerID, req.query.programID);
+    if (req.query && req.query.email)
+        result = await queryHouseholdIntakeByEmail(req.query.email);
     else
         result = await queryAllHouseholdIntake();
 
