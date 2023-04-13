@@ -38,6 +38,19 @@ const queryHouseholdIntakeByPartnerAndProgram = async (partnerID, programID) => 
     }
 };
 
+const queryHouseholdIntakeByEmail = async (email) => {
+    if (!email) {
+        throw new CustomError('email must defined', 404);
+    }
+    const result = await pool.query("SELECT * FROM HouseholdIntake where fk_User_email  = ?",
+        [email]);
+    if (result && result.length > 0) {
+        return result[0];
+    } else {
+        throw new CustomError(`Cannot find by ${email}`, 404);
+    }
+};
+
 const updateHouseholdIntake = async (data, householdIntakeID) => {
     // {...data, createdBy:'', createdAt:''}
     data.createdAt = undefined;
@@ -58,6 +71,7 @@ const updateHouseholdIntake = async (data, householdIntakeID) => {
 export {
     queryAllHouseholdIntake,
     queryHouseholdIntakeByPartnerAndProgram,
+    queryHouseholdIntakeByEmail,
     insertHouseholdIntake,
     updateHouseholdIntake,
     queryByHouseholdIntakeID
