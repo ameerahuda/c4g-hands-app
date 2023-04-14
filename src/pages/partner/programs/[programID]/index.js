@@ -5,7 +5,7 @@ import styles from '@/styles/Program.module.css';
 import Table from '@/components/Table';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronRight, faMinus, faPlus, faEye, faPencil } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight, faMinus, faPlus, faPencil, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import Modal from '@/components/Modal';
 import { useStateContext } from '@/context/context';
 import axios from "axios";
@@ -41,9 +41,10 @@ export default function Programs() {
     const [householdToEdit, setHouseholdToEdit] = useState({});
     const [showEditHouseholdModal, setShowEditHouseholdModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [tableSearchTerm, setTableSearchTerm] = useState('');
+    const [searchedItems, setSearchedItems] = useState();
 
     const formatDate = (strDate) => {
-        console.log('strDate', strDate)
         let date = new Date(strDate);
         return date.toLocaleString().split(',')[0];
     }
@@ -339,6 +340,42 @@ export default function Programs() {
         return yyyy + '-' + (mmChars[1]?mm:"0"+mmChars[0]) + '-' + (ddChars[1]?dd:"0"+ddChars[0]);
     }
 
+    function filterTable(arr, searchKey) {
+        return arr.filter(function(obj) {
+            return Object.keys(obj).some(function(key) {
+                if (typeof obj[key] === 'string') {
+                    return obj[key].toLowerCase().includes(searchKey.toLowerCase());
+                } else {
+                    return false;
+                }
+            })
+        });
+    }
+
+    useEffect(() => {
+        setSearchedItems(programHouseholds);
+    }, [programHouseholds])
+
+    const handleSearch = () => {
+        if (tableSearchTerm.length > 0) {
+            let tempArray = filterTable(programHouseholds, tableSearchTerm);
+            setSearchedItems(tempArray);
+        } else {
+            setSearchedItems(programHouseholds);
+        }
+    }
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    }
+
+    const handleClearSearch = () => {
+        setTableSearchTerm(''); 
+        setSearchedItems(programHouseholds);
+    }
+
     return isAuthenticated && !isLoading && (
         <>
             <Head>
@@ -405,9 +442,14 @@ export default function Programs() {
                         <p>{program?.req6}</p>
                     </span>
                 </div>
+                <div className={styles.tableSearch}>
+                    <input type="search" id="site-search" name="q" value={tableSearchTerm} onChange={(e) => setTableSearchTerm(e.target.value)} onKeyDown={handleKeyDown} />
+                    <button onClick={() => handleSearch()}><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+                    <button onClick={() => handleClearSearch()}>Clear</button>
+                </div>
                 <Table
                     tableColumns={columns}
-                    tableData={programHouseholds}
+                    tableData={searchedItems}
                     renderRowSubComponent={renderRowSubComponent}
                 />
 

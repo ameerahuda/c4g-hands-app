@@ -1,13 +1,12 @@
 .main {
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
     min-height: 100vh;
     font-family: var(--font-family);
 }
 
 .header {
-    margin-top: 6rem;
+    margin-top: 4rem;
 }
 
 .profileHeader {
@@ -19,7 +18,6 @@
 .profileHeader img {
     width: 100%;
     height: 50vh;
-    /* position: absolute; */
 }
 
 .title {

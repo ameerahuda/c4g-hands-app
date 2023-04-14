@@ -80,7 +80,7 @@ export default function Programs() {
             {
                 // Build our expander column
                 id: "view", // Make sure it has an ID
-                Header: 'View',
+                Header: 'View Details',
                 Cell: ({ row }) => (
                     <Link
                         href={{
