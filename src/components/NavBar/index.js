@@ -26,8 +26,8 @@ export default function NavBar() {
                 <Image
                     src="/icons/icon192.png"
                     alt="United Way Logo"
-                    width={70}
-                    height={70}
+                    width={50}
+                    height={50}
                     priority
                 />
                 <p>Housing and Savings Dashboard</p>
@@ -59,13 +59,20 @@ export default function NavBar() {
                                 </li>
                             </>
                         }
-				{user?.user_type === 'Partner Staff' &&
+				        {user?.user_type === 'Partner Staff' &&
                             <>
                                 <li className={`${styles.navItem} ${active === '/partner/programs' && styles.active}`}>
                                     <Link className={styles.link} href="/partner/programs" onClick={() => {setActive('/partner/programs'); setHamburgerMenu(false)}}>View Programs</Link>
                                 </li>
                                 <li className={`${styles.navItem} ${active === '/partner/users' && styles.active}`}>
                                     <Link className={styles.link} href="/admin/users" onClick={() => {setActive('/partner/users'); setHamburgerMenu(false)}}>Create Users</Link>
+                                </li>
+                            </>
+                        }
+                        {user?.user_type === 'Household' &&
+                            <>
+                                <li className={`${styles.navItem} ${active === '/household' && styles.active}`}>
+                                    <Link className={styles.link} href="/household" onClick={() => {setActive('/household'); setHamburgerMenu(false)}}>My Intake Details</Link>
                                 </li>
                             </>
                         }
