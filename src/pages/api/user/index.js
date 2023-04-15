@@ -21,7 +21,7 @@ handler.post(async (req, res) => {
     let result = await queryUserByEmail(email);
 
     if (result) {
-        throw new CustomError("user already exists", 401);
+        throw new CustomError("user already exists", 400);
     }
 
     const userCreationIndex = userTypeList.indexOf(user_type);

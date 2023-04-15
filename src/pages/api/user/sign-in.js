@@ -12,7 +12,7 @@ handler.post(async (req, res) => {
 
     const saltPwd = hashPassword(password);
     if (result && (result.password === saltPwd || result.password === password)) {
-        const token = signJWT(result.email, result.first_name, result.last_name, result.user_type);
+        const token = signJWT(result.email, result.first_name, result.last_name, result.user_type, result.partnerID);
 
         return res.status(200).json({email, token});
     } else {

@@ -38,7 +38,7 @@ handler.post(async (req, res) => {
         const result = await queryByHouseholdIntakeID(householdIntakeID);
 
         if (result) {
-            throw new CustomError("HouseholdIntakeID already exists", 401);
+            throw new CustomError("HouseholdIntakeID already exists", 400);
         }
     }
 

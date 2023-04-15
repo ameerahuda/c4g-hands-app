@@ -22,7 +22,7 @@ handler.post(async (req, res) => {
     } else {
         const result = await queryByJourneyID(journeyID);
         if (result) {
-            throw new CustomError("JourneyID already exists", 401);
+            throw new CustomError("JourneyID already exists", 400);
         }
     }
 
