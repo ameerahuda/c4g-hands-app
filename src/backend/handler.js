@@ -24,6 +24,7 @@ export default function getHandler() {
         req.first_name = null;
         req.last_name = null;
         req.user_type = null;
+        req.partner_id = null;
 
         // authorization code should start with Bearer
         const {authorization} = req.headers;
@@ -44,6 +45,7 @@ export default function getHandler() {
                 req.first_name = decoded.first_name;
                 req.last_name = decoded.last_name;
                 req.user_type = decoded.user_type;
+                req.partner_id = decoded.partnerID;
 
                 next();
             } else {

@@ -21,6 +21,16 @@ handler.get(async (req, res) => {
 // POST /api/program create program
 handler.post(async (req, res) => {
     const {programID} = req.body;
+    const partner_id = req.partner_id;
+
+    if (!req.body.partnerID && partner_id) {
+        req.body.partnerID = partner_id;
+    }
+
+    if (!req.body.partnerID) {
+        throw new CustomError("partnerID already exists", 400);
+    }
+
     let genID = programID;
     if (!genID)
         genID = generateID();
@@ -28,7 +38,7 @@ handler.post(async (req, res) => {
         const result = await queryByProgramID(programID);
 
         if (result) {
-            throw new CustomError("ProgramID already exists", 401);
+            throw new CustomError("ProgramID already exists", 400);
         }
     }
 

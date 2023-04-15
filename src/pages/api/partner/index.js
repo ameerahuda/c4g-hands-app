@@ -22,7 +22,7 @@ handler.post(async (req, res) => {
     } else {
         const result = await queryByPartnerID(partnerID);
         if (result) {
-            throw new CustomError("PartnerID already exists", 401);
+            throw new CustomError("PartnerID already exists", 400);
         }
     }
     console.log(`genID ${genID}`)
