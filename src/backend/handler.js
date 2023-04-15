@@ -45,7 +45,7 @@ export default function getHandler() {
                 req.first_name = decoded.first_name;
                 req.last_name = decoded.last_name;
                 req.user_type = decoded.user_type;
-                req.partner_id = decoded.partnerID;
+                req.partner_id = decoded.partner_id;
 
                 next();
             } else {

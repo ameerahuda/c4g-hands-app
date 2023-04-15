@@ -28,7 +28,7 @@ handler.post(async (req, res) => {
     }
 
     if (!req.body.partnerID) {
-        throw new CustomError("partnerID already exists", 400);
+        throw new CustomError("PartnerID not provided", 400);
     }
 
     let genID = programID;
