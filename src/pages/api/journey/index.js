@@ -2,6 +2,7 @@ import getHandler from "@/backend/handler";
 import CustomError from "@/backend/error/CustomError";
 import {generateID} from "@/backend/service/common";
 import {insertJourneyDetail, queryAllJourneyDetails, queryByJourneyID, updateJourneyDetail} from "@/backend/service/journey-service";
+import {insertJourneyMonth} from "@/backend/service/journey-month-service";
 
 const handler = getHandler();
 
@@ -22,13 +23,22 @@ handler.post(async (req, res) => {
     } else {
         const result = await queryByJourneyID(journeyID);
         if (result) {
-            throw new CustomError("JourneyID already exists", 401);
+            throw new CustomError("JourneyID already exists", 400);
         }
     }
+    const journeyByMonth = req.body.journeyByMonth;
+    delete req.body.journeyByMonth;
 
     await insertJourneyDetail({
         ...req.body, journeyID:genID, createdBy:req.email
     });
+    if (journeyByMonth && journeyByMonth.length > 0) {
+        for (let i = 0; i < journeyByMonth.length; i++) {
+            let temp = journeyByMonth[i];
+            temp.journeyID = genID;
+            await insertJourneyMonth(temp);
+        }
+    }
 
     return res.status(200).json(await queryByJourneyID(genID));
 });

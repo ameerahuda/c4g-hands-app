@@ -7,21 +7,24 @@ const queryAllJourneyMonth = async () => {
 };
 
 const insertJourneyMonth = async (data) => {
+    console.log("insertJourneyMonth")
     data.createdAt = undefined;
     delete data.createdAt;
+    console.log("insertJourneyMonth")
     return await pool.query("INSERT INTO JourneyByMonth SET ?", data);
 };
 
-const queryByJourneyMonthID = async (journeyByMonthID) => {
-    if (!journeyByMonthID) {
-        throw new CustomError('journeyID undefined', 404);
+const queryJourneyMonthByPrimaryKey = async (journeyID, month) => {
+    if (!journeyID || !month) {
+        throw new CustomError('journeyID or month undefined', 404);
     }
-    const result = await pool.query("SELECT * FROM JourneyByMonth where journeyByMonthID = ?",
-        [journeyByMonthID]);
+    const result = await pool.query("SELECT * FROM JourneyByMonth " +
+        "where journeyID = ? and month = ?",
+        [journeyID, month]);
     if (result && result.length > 0) {
         return result[0];
     } else {
-        throw new CustomError(`Cannot find by ${journeyByMonthID}`, 404);
+        return undefined;
     }
 };
 
@@ -29,20 +32,22 @@ const queryJourneyMonthByJourneyID = async (journeyID) => {
     if (!journeyID) {
         throw new CustomError('journeyID undefined', 404);
     }
-    const result = await pool.query("SELECT * FROM JourneyByMonth where fk_JourneyDetails_journeyID = ?",
+    const result = await pool.query("SELECT * FROM JourneyByMonth where journeyID = ? order by month",
         [journeyID]);
 
     return result;
 };
 
-const updateJourneyMonth = async (data, journeyByMonthID) => {
+const updateJourneyMonth = async (data) => {
     // {...data, createdBy:'', createdAt:''}
     data.createdAt = undefined;
     data.createdBy = undefined;
     delete data.createdBy;
     delete data.createdAt;
 
-    return await pool.query("Update JourneyByMonth SET ? where journeyByMonthID=?", [data, journeyByMonthID]);
+    return await pool.query("Update JourneyByMonth SET ? " +
+        "where journeyID = ? and month = ?",
+        [data, data.journeyID, data.month]);
 };
 
 export {
@@ -50,5 +55,5 @@ export {
     insertJourneyMonth,
     updateJourneyMonth,
     queryJourneyMonthByJourneyID,
-    queryByJourneyMonthID
+    queryJourneyMonthByPrimaryKey
 }

@@ -40,9 +40,31 @@ const updateJourneyDetail = async (data, journeyID) => {
     return await pool.query("Update JourneyDetails SET ? where journeyID=?", [data, journeyID]);
 };
 
+const syncJourneyDetail = async (journeyID) => {
+    return await pool.query("update JourneyDetails jd\n" +
+        "join (\n" +
+        "        select jm.journeyID journeyID,\n" +
+        "               sum(jm.subsidyAmt) subsidyAmt,\n" +
+        "               sum(jm.debtPaid) debtPaid,\n" +
+        "               sum(jm.evictionAmt) evictionAmt,\n" +
+        "               sum(jm.savedAmt) savedAmt,\n" +
+        "               sum(jm.totalSpent) totalSpent\n" +
+        "        from JourneyByMonth jm\n" +
+        "        where jm.journeyID = ?\n" +
+        "    ) as tmp\n" +
+        "on tmp.journeyID = jd.journeyID\n" +
+        "set jd.allowanceSpent = tmp.totalSpent,\n" +
+        "  jd.totalDebtPaid = tmp.debtPaid,\n" +
+        "  jd.totalEviction = tmp.evictionAmt,\n" +
+        "  jd.totalSaved = tmp.savedAmt,\n" +
+        "  jd.allowanceRemaining = jd.maxAllowance - tmp.totalSpent",
+        [journeyID]);
+};
+
 export {
     queryAllJourneyDetails,
     insertJourneyDetail,
     updateJourneyDetail,
-    queryByJourneyID
+    queryByJourneyID,
+    syncJourneyDetail
 }
