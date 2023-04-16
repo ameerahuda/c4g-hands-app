@@ -1,5 +1,6 @@
 import {pool} from "@/backend/pool";
 import CustomError from "@/backend/error/CustomError";
+import {queryJourneyMonthByJourneyID} from "@/backend/service/journey-month-service";
 
 
 const queryAllJourneyDetails = async () => {
@@ -19,7 +20,11 @@ const queryByJourneyID = async (journeyID) => {
     const result = await pool.query("SELECT * FROM JourneyDetails where journeyID = ?",
         [journeyID]);
     if (result && result.length > 0) {
-        return result[0];
+        const journeyDetails = result[0];
+
+        journeyDetails.journeyByMonth = await queryJourneyMonthByJourneyID(journeyID);
+
+        return journeyDetails;
     } else {
         throw new CustomError(`Cannot find by ${journeyID}`, 404);
     }

@@ -127,7 +127,7 @@ CREATE TABLE HouseholdIntake
 CREATE TABLE JourneyDetails
 (
     journeyID            varchar(10) NOT NULL,
-    fk_User_email        varchar(10) NOT NULL,
+    fk_User_email        varchar(50) NOT NULL,
     fk_Program_programID varchar(10) NOT NULL,
     journeyDuration      int         NOT NULL,
     maxAllowance         DECIMAL(13, 2),

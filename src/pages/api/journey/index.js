@@ -7,8 +7,8 @@ const handler = getHandler();
 
 // GET /api/journey query all journeys
 handler.get(async (req, res) => {
-    const allPartners = await queryAllJourneyDetails();
-    return res.status(200).json(allPartners);
+    const result = await queryAllJourneyDetails();
+    return res.status(200).json(result);
 });
 
 
@@ -40,6 +40,8 @@ handler.put(async (req, res) => {
 
     const result = await queryByJourneyID(journeyID);
     if (result) {
+        req.body.fk_User_email = result.fk_User_email;
+        req.body.fk_Program_programID = result.fk_Program_programID;
         await updateJourneyDetail(req.body, journeyID);
         return res.status(200).json(await queryByJourneyID(journeyID));
     } else {
