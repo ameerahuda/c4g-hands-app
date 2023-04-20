@@ -17,9 +17,10 @@ const handler = getHandler();
 handler.get(async (req, res) => {
 
     let result;
+
     if (req.query && (req.query.partnerID || req.query.programID))
         result = await queryHouseholdIntakeByPartnerAndProgram(req.query.partnerID, req.query.programID);
-    if (req.query && req.query.email)
+    else if (req.query && req.query.email)
         result = await queryHouseholdIntakeByEmail(req.query.email);
     else
         result = await queryAllHouseholdIntake();
