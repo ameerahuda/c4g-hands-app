@@ -7,6 +7,19 @@ const queryAllJourneyDetails = async () => {
     return await pool.query("SELECT * FROM JourneyDetails");
 };
 
+const queryJourneyByEmail = async (email) => {
+    if (!email) {
+        throw new CustomError('email must defined', 404);
+    }
+    const result = await pool.query("SELECT * FROM JourneyDetails where fk_User_email  = ?",
+        [email]);
+    if (result && result.length > 0) {
+        return result;
+    } else {
+        throw new CustomError(`Cannot find by ${email}`, 404);
+    }
+};
+
 const insertJourneyDetail = async (data) => {
     data.createdAt = undefined;
     delete data.createdAt;
@@ -63,6 +76,7 @@ const syncJourneyDetail = async (journeyID) => {
 
 export {
     queryAllJourneyDetails,
+    queryJourneyByEmail,
     insertJourneyDetail,
     updateJourneyDetail,
     queryByJourneyID,

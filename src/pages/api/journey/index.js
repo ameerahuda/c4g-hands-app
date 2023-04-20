@@ -1,14 +1,29 @@
 import getHandler from "@/backend/handler";
 import CustomError from "@/backend/error/CustomError";
 import {generateID} from "@/backend/service/common";
-import {insertJourneyDetail, queryAllJourneyDetails, queryByJourneyID, updateJourneyDetail} from "@/backend/service/journey-service";
+import {
+    insertJourneyDetail,
+    queryAllJourneyDetails,
+    queryByJourneyID,
+    queryJourneyByEmail,
+    updateJourneyDetail
+} from "@/backend/service/journey-service";
 import {insertJourneyMonth} from "@/backend/service/journey-month-service";
+import {queryHouseholdIntakeByEmail} from "@/backend/service/household";
 
 const handler = getHandler();
 
 // GET /api/journey query all journeys
+// GET /api/journey?email=:email query journey by email
 handler.get(async (req, res) => {
-    const result = await queryAllJourneyDetails();
+
+    let result;
+
+    if (req.query && req.query.email)
+        result = await queryJourneyByEmail(req.query.email);
+    else
+        result = await queryAllJourneyDetails();
+
     return res.status(200).json(result);
 });
 
