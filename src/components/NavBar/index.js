@@ -65,7 +65,7 @@ export default function NavBar() {
                                     <Link className={styles.link} href="/partner/programs" onClick={() => {setActive('/partner/programs'); setHamburgerMenu(false)}}>View Programs</Link>
                                 </li>
                                 <li className={`${styles.navItem} ${active === '/partner/users' && styles.active}`}>
-                                    <Link className={styles.link} href="/admin/users" onClick={() => {setActive('/partner/users'); setHamburgerMenu(false)}}>Create Users</Link>
+                                    <Link className={styles.link} href="/partner/users" onClick={() => {setActive('/partner/users'); setHamburgerMenu(false)}}>Create Users</Link>
                                 </li>
                             </>
                         }

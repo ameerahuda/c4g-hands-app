@@ -12,15 +12,18 @@ import axios from "axios";
 
 const initialFormState = {
     emailAddress: '',
+    password: 'd3f@ult',
     firstName: '',
     lastName: '',
-    gender: '',
     userType: '',
-    partnerName:''
+    gender: '',
+    race: '',
+    phoneNumber: '',
+    partnerName:'none'
 }
 
 export default function Users() {
-    const { 
+    const {
 		isAuthenticated,
         token
 	} = useStateContext();
@@ -39,7 +42,7 @@ export default function Users() {
                 url: `${process.env.NEXT_PUBLIC_API_URL}/partner`,
                 headers: { Authorization: `Bearer ${token}` }
             };
-    
+
             await axios(config)
                 .then((response) => {
                     setPartners(response.data);
@@ -99,9 +102,15 @@ export default function Users() {
         } else if (userForm.lastName.length === 0) {
                       valid = false;
         } else if (userForm.gender.length === 0) {
-                     valid = false;
+            valid = false;
+        } else if (userForm.race.length === 0) {
+            valid = false;
+        } else if (userForm.phoneNumber.length === 0) {
+            valid = false;
         } else if (userForm.userType.length === 0) {
-                      valid = false;
+            valid = false;
+        } else if (userForm.partnerName.length === 0) {
+            valid = false;
         }
 
         return valid;
@@ -167,31 +176,62 @@ export default function Users() {
                         />
 
                         <label htmlFor="gender">Gender</label>
-                        <input
-                            type="text"
+                        <select
                             id="gender"
                             name="gender"
                             value={userForm.gender}
                             onChange={handleFormChange}
                             required
-                        />
-                        <label htmlFor="userType">User Role</label>
+                        >
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="O">Other</option>
+                        </select>
+
+                        <label htmlFor="race">Race</label>
                         <input
                             type="text"
+                            id="race"
+                            name="race"
+                            value={userForm.race}
+                            onChange={handleFormChange}
+                            required
+                        />
+
+                        <label htmlFor="phoneNumber">Phone Number</label>
+                        <input
+                            type="number"
+                            id="phoneNumber"
+                            name="phoneNumber"
+                            value={userForm.phoneNumber}
+                            onChange={handleFormChange}
+                            required
+                        />
+
+                        <label htmlFor="userType">User Role</label>
+                        <select
                             id="userType"
                             name="userType"
                             value={userForm.userType}
                             onChange={handleFormChange}
                             required
-                        />
+                        >
+                            <option value="UnitedWay Staff">UnitedWay Staff</option>
+                            <option value="Partner Staff">Partner Staff</option>
+                            <option value="Household">Household</option>
+                        </select>
+
                         <label htmlFor="partnerName">Partner</label>
-                        <input
-                            type="text"
+                        <select
                             id="partnerName"
                             name="partnerName"
                             value={userForm.partnerName}
                             onChange={handleFormChange}
-                        />
+                        >
+                          {partners.map((partner) => (
+                            <option value={partner.partnerName}>{partner.partnerName}</option>
+                         ))}
+                        </select>
 
                         {errorMessage && <p>{errorMessage}</p>}
                         <button type="submit">Save</button>
