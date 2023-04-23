@@ -228,8 +228,9 @@ export default function Users() {
                             value={userForm.partnerName}
                             onChange={handleFormChange}
                         >
-                          {partners.map((partner) => (
-                            <option value={partner.partnerName}>{partner.partnerName}</option>
+			<option value="None">United Way</option>	    
+                          {partners.map((partner, index) => (
+                            <option key={index} value={partner.partnerName}>{partner.partnerName}</option>
                          ))}
                         </select>
 
