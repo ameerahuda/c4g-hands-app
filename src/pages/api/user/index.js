@@ -26,18 +26,20 @@ handler.post(async (req, res) => {
 
     const userCreationIndex = userTypeList.indexOf(user_type);
     if (userTypeList.indexOf(user_type) === -1) {
-        throw new CustomError(`${user_type} is not in the list of ${userTypeList}`, 400);
+        throw new CustomError(`user_type[${user_type}] is not in the list of ${userTypeList}`, 400);
     }
 
     const userLoginIndex = userTypeList.indexOf(req.user_type);
     if (userLoginIndex !== -1 && userLoginIndex < 2 && userLoginIndex <= userCreationIndex) {
         console.log(`User ${req.email} ${req.user_type} is creating user ${email} ${user_type}`)
     } else {
-        throw new CustomError(`User ${req.email} ${req.user_type} cannot create user ${email} ${user_type}`, 403);
+        throw new CustomError(`User email[${req.email}] user_type[${req.user_type}] cannot create user ${email} ${user_type}`, 403);
     }
 
     if (userCreationIndex === 1 && !partnerID) {
-        throw new CustomError(`${user_type} must be assigned with a Partner`, 400);
+        throw new CustomError(`user_type[${user_type}] must be assigned with a Partner by partnerID`, 400);
+    } else if (partnerID) {
+        throw new CustomError(`user_type[${user_type}] cannot assign with a Partner`, 400);
     }
 
     if (partnerID) {
