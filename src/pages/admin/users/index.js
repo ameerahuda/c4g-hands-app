@@ -145,31 +145,31 @@ export default function Users() {
                     handleClose={() => {setShowCreateUserModal(false); setUserForm(initialFormState);}}
                 >
                     <form className={styles.userForm} onSubmit={handleUserCreated}>
-                        <label htmlFor="emailAddress">Email Address</label>
+                        <label htmlFor="email">Email Address</label>
                         <input
                             type="text"
-                            id="emailAddress"
-                            name="emailAddress"
+                            id="email"
+                            name="email"
                             value={userForm.email}
                             onChange={handleFormChange}
                             required
                         />
 
-                        <label htmlFor="firstName">First Name</label>
+                        <label htmlFor="first_name">First Name</label>
                         <input
                             type="text"
-                            id="firstName"
-                            name="firstName"
+                            id="first_name"
+                            name="first_name"
                             value={userForm.first_name}
                             onChange={handleFormChange}
                             required
                         />
 
-                        <label htmlFor="lastName">Last Name</label>
+                        <label htmlFor="last_name">Last Name</label>
                         <input
                             type="text"
-                            id="lastName"
-                            name="lastName"
+                            id="last_name"
+                            name="last_name"
                             value={userForm.last_name}
                             onChange={handleFormChange}
                             required
@@ -208,10 +208,10 @@ export default function Users() {
                             required
                         />
 
-                        <label htmlFor="userType">User Role</label>
+                        <label htmlFor="user_type">User Role</label>
                         <select
-                            id="userType"
-                            name="userType"
+                            id="user_type"
+                            name="user_type"
                             value={userForm.user_type}
                             onChange={handleFormChange}
                             required
@@ -221,10 +221,10 @@ export default function Users() {
                             <option value="Household">Household</option>
                         </select>
 
-                        <label htmlFor="partnerName">Partner</label>
+                        <label htmlFor="partnerID">Partner</label>
                         <select
-                            id="partnerName"
-                            name="partnerName"
+                            id="partnerID"
+                            name="partnerID"
                             value={userForm.partnerID}
                             onChange={handleFormChange}
                         >
