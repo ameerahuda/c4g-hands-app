@@ -11,15 +11,15 @@ import { useStateContext } from '@/context/context';
 import axios from "axios";
 
 const initialFormState = {
-    emailAddress: '',
+    email: '',
     password: 'd3f@ult',
-    firstName: '',
-    lastName: '',
-    userType: '',
+    first_name: '',
+    last_name: '',
+    user_type: '',
     gender: '',
     race: '',
     phoneNumber: '',
-    partnerName:'none'
+    partnerID:'none'
 }
 
 export default function Users() {
@@ -95,11 +95,11 @@ export default function Users() {
     const validateForm = () => {
         let valid = true;
 
-        if (userForm.emailAddress.length === 0) {
+        if (userForm.email.length === 0) {
             valid = false;
-        } else if (userForm.firstName.length === 0) {
+        } else if (userForm.first_name.length === 0) {
             valid = false;
-        } else if (userForm.lastName.length === 0) {
+        } else if (userForm.last_name.length === 0) {
                       valid = false;
         } else if (userForm.gender.length === 0) {
             valid = false;
@@ -107,9 +107,9 @@ export default function Users() {
             valid = false;
         } else if (userForm.phoneNumber.length === 0) {
             valid = false;
-        } else if (userForm.userType.length === 0) {
+        } else if (userForm.user_type.length === 0) {
             valid = false;
-        } else if (userForm.partnerName.length === 0) {
+        } else if (userForm.partnerID.length === 0) {
             valid = false;
         }
 
@@ -150,7 +150,7 @@ export default function Users() {
                             type="text"
                             id="emailAddress"
                             name="emailAddress"
-                            value={userForm.emailAddress}
+                            value={userForm.email}
                             onChange={handleFormChange}
                             required
                         />
@@ -160,7 +160,7 @@ export default function Users() {
                             type="text"
                             id="firstName"
                             name="firstName"
-                            value={userForm.firstName}
+                            value={userForm.first_name}
                             onChange={handleFormChange}
                             required
                         />
@@ -170,7 +170,7 @@ export default function Users() {
                             type="text"
                             id="lastName"
                             name="lastName"
-                            value={userForm.lastName}
+                            value={userForm.last_name}
                             onChange={handleFormChange}
                             required
                         />
@@ -212,7 +212,7 @@ export default function Users() {
                         <select
                             id="userType"
                             name="userType"
-                            value={userForm.userType}
+                            value={userForm.user_type}
                             onChange={handleFormChange}
                             required
                         >
@@ -225,10 +225,10 @@ export default function Users() {
                         <select
                             id="partnerName"
                             name="partnerName"
-                            value={userForm.partnerName}
+                            value={userForm.partnerID}
                             onChange={handleFormChange}
                         >
-			<option value="None">United Way</option>	    
+			<option value="None">United Way</option>
                           {partners.map((partner, index) => (
                             <option key={index} value={partner.partnerName}>{partner.partnerName}</option>
                          ))}
