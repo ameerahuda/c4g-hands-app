@@ -230,7 +230,7 @@ export default function Users() {
                         >
 			<option value="None">United Way</option>
                           {partners.map((partner, index) => (
-                            <option key={index} value={partner.partnerName}>{partner.partnerName}</option>
+                            <option key={index} value={partner.partnerID}>{partner.partnerName}</option>
                          ))}
                         </select>
 
