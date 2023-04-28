@@ -38,7 +38,7 @@ handler.post(async (req, res) => {
 
     if (userCreationIndex === 1 && !partnerID) {
         throw new CustomError(`user_type[${user_type}] must be assigned with a Partner by partnerID`, 400);
-    } else if (partnerID) {
+    } else if (userCreationIndex !== 1 && partnerID) {
         throw new CustomError(`user_type[${user_type}] cannot assign with a Partner`, 400);
     }
 
