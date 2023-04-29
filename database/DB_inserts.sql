@@ -21,9 +21,9 @@ INSERT INTO User
 VALUES ('userhouse6@gmail.com', 'password6', 'Josetta', 'Smith', 'Household', current_date, 'M', 'P', '8866666666', null, current_timestamp, 'Init', 'F');
 
 INSERT INTO Partner
-VALUES ('ABC001', 'Bright House Partners', '123, main Street, Any Town, USA', 'www.facebook.com/unitedway', 50000.00, current_timestamp, 'Init');
+VALUES ('ABC001', 'Bright House Partners', '123, main Street, Any Town, USA', 'www.facebook.com/unitedway', 50000.00, current_timestamp, 'Init', null);
 INSERT INTO Partner
-VALUES ('XYZ001', 'Sunshine Community Friends', '456, 2nd Street, Any Town, USA', 'www.facebook.com/delta', 100000.00, current_timestamp, 'Init');
+VALUES ('XYZ001', 'Sunshine Community Friends', '456, 2nd Street, Any Town, USA', 'www.facebook.com/delta', 100000.00, current_timestamp, 'Init', null);
 
 
 INSERT INTO Classes
