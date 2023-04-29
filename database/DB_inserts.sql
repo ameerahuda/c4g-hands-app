@@ -117,3 +117,21 @@ VALUES
      "55555", "Y", "Married", "Associate Degree", "Never Served", "FInd the values23", "Part Time", 2, 1,  1300.00, "no kown address34", "Shanaya, 54; Julia 45",
      " boy 15", STR_TO_DATE('01/01/2023', '%m/%d/%Y'), "5555 32nd Street, Any Town, USA, 55555", "Any Town Rentals45", "Johns Creek", "Forsyth County", "55555", 1200.00,
      STR_TO_DATE('4/5/2023', '%m/%d/%Y'), "In Progress", "no impact notes for now", current_timestamp, 'Init');
+
+
+INSERT INTO JourneyDetails
+VALUES
+    ('of1wj8732j','userhouse6@gmail.com', 'ABC001-02', 6, 4000.00, 2000.00, 2000.00, 'Pre Housing', 500.00, 200.00, 1000.00, 45, 'N', 'N', 'Y', 'N',
+     'Y', 'N', 'Y', 'N', 'Y', 'N', 'Y', 'N', 'Y', 'N', current_timestamp, 'Init');
+INSERT INTO JourneyDetails
+VALUES
+    ('o22wrt73oj','userhouse4@gmail.com', 'ABC001-02', 6, 4000.00, 1000.00, 3000.00, 'Post Housing', 400.00, 300.00, 2000.00, 20, 'Y', 'Y', 'Y', 'N',
+     'Y', 'N', 'Y', 'N', 'Y', 'N', 'Y', 'N', 'Y', 'N', current_timestamp, 'Init');
+
+INSERT INTO JourneyByMonth
+VALUES
+    ('of1wj8732j', '1', STR_TO_DATE('01/01/2023', '%m/%d/%Y'), 500, STR_TO_DATE('02/01/2023', '%m/%d/%Y'), 500.00, 200.00, 100.00, 'AnyWay Apartments', '600', 800.00, current_timestamp, 'Init');
+INSERT INTO JourneyByMonth
+VALUES
+    ('o22wrt73oj', '1', STR_TO_DATE('01/01/2023', '%m/%d/%Y'), 500, STR_TO_DATE('02/01/2023', '%m/%d/%Y'), 500.00, 200.00, 100.00, 'AnyWay Apartments', '600', 800.00, current_timestamp, 'Init');
+
