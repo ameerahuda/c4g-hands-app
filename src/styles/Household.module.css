@@ -3,20 +3,63 @@
     flex-direction: column;
     min-height: 100vh;
     font-family: var(--font-family);
-    margin: 0 3rem;
+    margin: 0 3rem 2rem 3rem;
 }
 
 .header {
     margin-top: 6rem;
 }
 
-.partnerButtons {
-    display: flex;
-    align-self: center;
+.sectionBreak {
     margin-bottom: 2rem;
 }
 
-.partnerBtn {
+.householdHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.householdContainer {
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    box-shadow:  0 10px 27px rgba(0, 0, 0, 0.1);
+    display: flex;
+    width: 100%; 
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.householdContainer span {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 2px solid var(--grey-1);
+}
+
+.householdContainer span {
+    font-size: 14px;
+}
+
+.householdContainerHeader {
+    background-color: var(--light-blue);
+    color: var(--white);
+}
+
+.containerHeader {
+    font-weight: 600;
+}
+
+.journeyButtons {
+    display: flex;
+    justify-content: space-between;
+    align-self: center;
+    margin: 2rem 0;
+}
+
+.journeyBtn {
     text-align: center;
     text-transform: uppercase;
     transition: 0.5s;
@@ -28,29 +71,22 @@
     background-size: 200% auto; 
     background-color: #fd9542;
     cursor: pointer;
-    margin-right: 1rem;
 }
 
-.partnerBtn:hover {
-    border: 1px solid #fd9542;
-    color: #fd9542;
-    background-color: white;
-}
-
-.partnerForm {
+.journeyForm {
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.partnerForm label {
+.journeyForm label {
     margin-bottom: 0.5rem;
     font-size: 14px;
     text-transform: uppercase;
 }
 
-.partnerForm input {
+.journeyForm input {
     margin-bottom: 1rem;
     border: 1px solid grey;
     background: none;
@@ -58,7 +94,7 @@
     padding: 0.5rem;
 }
 
-.partnerForm textarea {
+.journeyForm textarea {
     margin-bottom: 1rem;
     border: 1px solid grey;
     background: none;
@@ -66,7 +102,7 @@
     padding: 0.5rem;
 }
 
-.partnerForm button {
+.journeyForm button {
     text-align: center;
     text-transform: uppercase;
     transition: 0.5s;
@@ -80,32 +116,13 @@
     cursor: pointer;
 }
 
-.partnerForm button:hover {
+.journeyForm button:hover {
     background-position: right center;
 }
 
-.partnerForm p {
+
+.journeyForm p {
     margin-bottom: 1rem;
-}
-
-.expandedContent {
-    display: flex;
-    width: 100%; 
-    flex-wrap: wrap;
-    background-color: var(--grey-1);
-}
-
-.expandedContent span {
-    margin: 1rem 2rem;
-}
-
-.expandedHeader {
-    font-size: 13px;
-    color: var(--grey-2);
-}
-
-.rowAction {
-    cursor: pointer;
 }
 
 .errorMessage {
