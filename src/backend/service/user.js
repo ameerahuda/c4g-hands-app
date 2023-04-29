@@ -21,18 +21,20 @@ const updateUser = async (data, email) => {
     data.user_type = undefined;
     data.password = undefined;
     data.partnerID = undefined;
+    data.needResetPwd = undefined;
     delete data.createdBy;
     delete data.createdBy;
     delete data.user_type;
     delete data.password;
     delete data.partnerID;
+    delete data.needResetPwd;
 
     const user = await pool.query("Update User SET ? where email=?", [data, email]);
     return user;
 };
 
-const updatePassword = async (password, email) => {
-    const user = await pool.query("Update User SET password=? where email=?", [password, email]);
+const updatePassword = async (password, email, needResetPwd) => {
+    const user = await pool.query("Update User SET password=?, needResetPwd=? where email=?", [password, needResetPwd, email]);
     return user;
 };
 

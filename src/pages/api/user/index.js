@@ -49,6 +49,7 @@ handler.post(async (req, res) => {
     const saltPwd = hashPassword(password);
     await insertUser({
         ...req.body,
+        needResetPwd: 'T',
         password: saltPwd
     });
     result = await queryUserByEmail(email);
