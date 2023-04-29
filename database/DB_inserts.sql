@@ -1,24 +1,24 @@
 
 INSERT INTO User
-VALUES ('user1@gmail.com', 'password1', 'Atul', 'Verma', 'UnitedWay Staff', current_date, 'M', 'H', '9999999999', null, current_timestamp, 'Init');
+VALUES ('user1@gmail.com', 'password1', 'Atul', 'Verma', 'UnitedWay Staff', current_date, 'M', 'H', '9999999999', null, current_timestamp, 'Init', 'T');
 INSERT INTO User
-VALUES ('user2@gmail.com', 'password2', 'Kiran', 'Chava', 'Partner Staff', current_date, 'F', 'W', '5555555555', 'ABC001', current_timestamp, 'Init');
+VALUES ('user2@gmail.com', 'password2', 'Kiran', 'Chava', 'Partner Staff', current_date, 'F', 'W', '5555555555', 'ABC001', current_timestamp, 'Init', 'T');
 INSERT INTO User
-VALUES ('user3@gmail.com', 'password3', 'Ameera', 'Huda', 'Household', current_date, 'F', 'B', '4444444444', null, current_timestamp, 'Init');
+VALUES ('user3@gmail.com', 'password3', 'Ameera', 'Huda', 'Household', current_date, 'F', 'B', '4444444444', null, current_timestamp, 'Init', 'F');
 INSERT INTO User
-VALUES ('user4@gmail.com', 'password4', 'Yang', 'Bai', 'Household', current_date, 'M', 'P', '6666666666', null, current_timestamp, 'Init');
+VALUES ('user4@gmail.com', 'password4', 'Yang', 'Bai', 'Household', current_date, 'M', 'P', '6666666666', null, current_timestamp, 'Init', 'F');
 INSERT INTO User
-VALUES ('userhouse1@gmail.com', 'password4', 'Yang', 'Bai', 'Household', current_date, 'M', 'P', '6666666666', null, current_timestamp, 'Init');
+VALUES ('userhouse1@gmail.com', 'password4', 'Yang', 'Bai', 'Household', current_date, 'M', 'P', '6666666666', null, current_timestamp, 'Init', 'F');
 INSERT INTO User
-VALUES ('userhouse2@gmail.com', 'password4', 'Yang', 'Bai', 'Household', current_date, 'M', 'P', '6666666666', null, current_timestamp, 'Init');
+VALUES ('userhouse2@gmail.com', 'password4', 'Yang', 'Bai', 'Household', current_date, 'M', 'P', '6666666666', null, current_timestamp, 'Init', 'F');
 INSERT INTO User
-VALUES ('userhouse3@gmail.com', 'password4', 'Yang', 'Bai', 'Household', current_date, 'M', 'P', '6666666666', null, current_timestamp, 'Init');
+VALUES ('userhouse3@gmail.com', 'password4', 'Yang', 'Bai', 'Household', current_date, 'M', 'P', '6666666666', null, current_timestamp, 'Init', 'F');
 INSERT INTO User
-VALUES ('userhouse4@gmail.com', 'password4', 'Yang', 'Bai', 'Household', current_date, 'M', 'P', '6666666666', null, current_timestamp, 'Init');
+VALUES ('userhouse4@gmail.com', 'password4', 'Yang', 'Bai', 'Household', current_date, 'M', 'P', '6666666666', null, current_timestamp, 'Init', 'F');
 INSERT INTO User
-VALUES ('userhouse5@gmail.com', 'password5', 'Cathy', 'Adams', 'Household', current_date, 'M', 'P', '7766666666', null, current_timestamp, 'Init');
+VALUES ('userhouse5@gmail.com', 'password5', 'Cathy', 'Adams', 'Household', current_date, 'M', 'P', '7766666666', null, current_timestamp, 'Init', 'F');
 INSERT INTO User
-VALUES ('userhouse6@gmail.com', 'password6', 'Josetta', 'Smith', 'Household', current_date, 'M', 'P', '8866666666', null, current_timestamp, 'Init');
+VALUES ('userhouse6@gmail.com', 'password6', 'Josetta', 'Smith', 'Household', current_date, 'M', 'P', '8866666666', null, current_timestamp, 'Init', 'F');
 
 INSERT INTO Partner
 VALUES ('ABC001', 'Bright House Partners', '123, main Street, Any Town, USA', 'www.facebook.com/unitedway', 50000.00, current_timestamp, 'Init');

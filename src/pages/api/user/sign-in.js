@@ -14,7 +14,7 @@ handler.post(async (req, res) => {
     if (result && (result.password === saltPwd || result.password === password)) {
         const token = signJWT(result.email, result.first_name, result.last_name, result.user_type, result.partnerID);
 
-        return res.status(200).json({email, token});
+        return res.status(200).json({email, needResetPwd:result.needResetPwd, token});
     } else {
         throw new CustomError("Bad credential", 400);
     }

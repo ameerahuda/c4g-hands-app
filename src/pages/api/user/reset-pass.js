@@ -4,23 +4,39 @@ import {hashPassword, queryUserByEmail, updatePassword} from "@/backend/service/
 
 const handler = getHandler();
 
+const userTypeList = ["UnitedWay Staff", "Partner Staff", "Household"];
+
 // PUT /api/user/reset-pass
 handler.put(async (req, res) => {
     const {email, password} = req.body;
 
-    if (email !== req.email) {
-        throw new CustomError("email doesn't match current login user", 403);
+    let modifyUser = await queryUserByEmail(email);
+
+    if (!modifyUser) {
+        throw new CustomError(`user ${email} not exists`, 404);
     }
 
-    let result = await queryUserByEmail(email);
+    const loginUserIdx = userTypeList.indexOf(req.user_type);
+    const modifyUserIdx = userTypeList.indexOf(modifyUser.user_type);
 
-    if (!result) {
-        throw new CustomError("user not exists", 404);
+    if (loginUserIdx > modifyUserIdx) {
+        throw new CustomError(`User email[${req.user_type}] cannot reset password for user ${email} ${modifyUser.user_type}`, 403);
+    } else if (loginUserIdx === modifyUserIdx) {
+        if (loginUserIdx === 0 || email === req.email) {
+            console.log(`User ${req.email} ${req.user_type} is resetting user ${email} password`);
+        } else {
+            throw new CustomError(`User email[${req.user_type}] cannot reset password for user ${email} ${modifyUser.user_type}`, 403);
+        }
+    }
+
+    let needResetPwd = 'T';
+    if (email === req.email) {
+        needResetPwd = 'F';
     }
 
     const saltPwd = hashPassword(password);
 
-    await updatePassword(saltPwd, email);
+    await updatePassword(saltPwd, email, needResetPwd);
 
     return res.status(200).json('success');
 });
