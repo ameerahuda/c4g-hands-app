@@ -78,9 +78,11 @@ export default function Partners() {
                 setPartners([...partners, partner]);
                 setShowCreatePartnerModal(false);
                 setPartnerForm(initialFormState);
+                setErrorMessage('');
             })
             .catch((error) => {
                 console.log(error);
+                setErrorMessage('Unable to save. Try again.')
             });
     }
 
@@ -262,7 +264,7 @@ export default function Partners() {
                             onChange={handleFormChange}
                             required
                         />
-                        {errorMessage && <p>{errorMessage}</p>}
+                        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
                         <button type="submit">Save</button>
                     </form>
                 </Modal>

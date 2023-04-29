@@ -1,0 +1,14 @@
+.accordionContainer {
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow:  0 10px 27px rgba(0, 0, 0, 0.1);
+}
+
+.accordionHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.accordionContent {
+    margin-top: 1rem;
+}

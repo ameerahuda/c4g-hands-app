@@ -164,9 +164,11 @@ export default function Programs() {
                 setPrograms([...programs, program]);
                 setShowCreateProgramModal(false);
                 setProgramForm(initialFormState);
+                setErrorMessage('');
             })
             .catch((error) => {
                 console.log(error);
+                setErrorMessage('Unable to save. Try again.')
             });
     }
 
@@ -186,9 +188,11 @@ export default function Programs() {
                 setPrograms(tempPrograms);
                 setShowEditProgramModal(false);
                 setProgramToEdit({});
+                setErrorMessage('');
             })
             .catch((error) => {
                 console.log(error);
+                setErrorMessage('Unable to save. Try again.')
             });
     }
 
@@ -205,12 +209,13 @@ export default function Programs() {
         let fieldName = event.target.id;
         setProgramToEdit({...programToEdit , [fieldName]: event.target.value})
     }
+    
     const handleProgramCreated = (event) => {
 	    event.preventDefault();
         createProgram(programForm)
   	};
 
-      const handleProgramEdited = (event) => {
+    const handleProgramEdited = (event) => {
 	    event.preventDefault();
         editProgram(programToEdit)
   	};
@@ -376,7 +381,7 @@ export default function Programs() {
                             onChange={handleFormChange}
                             required
                         />
-                        {errorMessage && <p>{errorMessage}</p>}
+                        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
                         <button type="submit">Save</button>
                     </form>
                 </Modal>
@@ -510,7 +515,7 @@ export default function Programs() {
                             onChange={handleEditFormChange}
                             required
                         />
-                        {errorMessage && <p>{errorMessage}</p>}
+                        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
                         <button type="submit">Save</button>
                     </form>
                 </Modal>

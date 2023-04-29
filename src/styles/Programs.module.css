@@ -110,3 +110,8 @@
 .rowAction {
     cursor: pointer;
 }
+
+.errorMessage {
+    font-weight: 500;
+    color: red;
+}

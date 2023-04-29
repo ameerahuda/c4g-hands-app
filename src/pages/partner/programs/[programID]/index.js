@@ -5,25 +5,42 @@ import styles from '@/styles/Program.module.css';
 import Table from '@/components/Table';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronRight, faMinus, faPlus, faPencil, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight, faMinus, faPlus, faPencil, faMagnifyingGlass, faEye } from '@fortawesome/free-solid-svg-icons'
 import Modal from '@/components/Modal';
 import { useStateContext } from '@/context/context';
 import axios from "axios";
+import Link from 'next/link';
 
 const initialFormState = {
-    programName: '',
-    programBudget: '',
-    prehouseMonths: '',
-    posthouseMonths: '',
-    preMonthlyallownce: '',
-    postMonthlyallowance: '',
-    movingAllowance: '',
-    req1: '',
-    req2: '',
-    req3: '',
-    req4: '',
-    req5: '',
-    req6: ''
+    partnerStaffName: '',
+    fk_User_email: '',
+    householdName: '',
+    enrollmentDate: '',
+    locationEntry: '',
+    motelName: '',
+    motelAddress: '',
+    motelZip: '',
+    educationStatus: '',
+    employmentType: '',
+    militaryStatus: '',
+    maritalStatus: '',
+    incomeSource: '',
+    monthlyIncome: '',
+    haveKids: '',
+    adultCount: '',
+    kidsCount: '',
+    adultNameAge: '',
+    kidsNameAge: '',
+    prehousingDT: '',
+    apartmentLandlordName: '',
+    prehousingAddress: '',
+    prehouseCity: '',
+    prehoseZip: '',
+    preHouseCounty: '',
+    monthlyRent: '',
+    graduationDT: '',
+    sureImpactStatus: '',
+    sureImpactNotes: ''
 }
 
 export default function Programs() {
@@ -43,6 +60,8 @@ export default function Programs() {
     const [errorMessage, setErrorMessage] = useState('');
     const [tableSearchTerm, setTableSearchTerm] = useState('');
     const [searchedItems, setSearchedItems] = useState();
+    const [householdForm, setHouseholdForm] = useState(initialFormState);
+    const [showCreateHouseholdModal, setShowCreateHouseholdModal] = useState(false);
 
     const formatDate = (strDate) => {
         let date = new Date(strDate);
@@ -87,24 +106,31 @@ export default function Programs() {
                     <p>{formatDate(row.original.enrollmentDate)}</p>
                 )
             },
-            // {
-            //     id: "view",
-            //     Header: 'View',
-            //     Cell: ({ row }) => (
-            //         <span className={styles.rowAction} onClick={() => openProgramPage(row.original)}>
-            //             <FontAwesomeIcon icon={faEye} />
-            //         </span>
-            //     )
-            // },
+            {
+                id: "view", 
+                Header: 'View Journey',
+                Cell: ({ row }) => (
+                    <Link
+                        href={{
+                        pathname: `/household/${row.original.householdIntakeID}/journey`,
+                        query: { household: JSON.stringify(row.original) },
+                        }} as={`/household/${row.original.householdIntakeID}/journey`}
+                    >
+                        <span className={styles.rowAction}>
+                            <FontAwesomeIcon icon={faEye} />
+                        </span>
+                    </Link>
+                )
+            },
             {
                 id: "edit", 
                 Header: 'Edit',
                 Cell: ({ row }) => (
-                    <span className={styles.rowAction} onClick={() => {setHouseholdToEdit(row.original); setShowEditHouseholdModal(true); console.log(row.original)}}>
+                    <span className={styles.rowAction} onClick={() => {setHouseholdToEdit(row.original); setShowEditHouseholdModal(true);}}>
                         <FontAwesomeIcon icon={faPencil} />
                     </span>
                 )
-            },
+            }
         ], []
     );
 
@@ -149,7 +175,7 @@ export default function Programs() {
                 </span>
                 <span>
                     <p className={styles.expandedHeader}>Monthly Income</p>
-                    <p>{row.original.monthlyIncome}</p>
+                    <p>$ {row.original.monthlyIncome}</p>
                 </span>
                 <span>
                     <p className={styles.expandedHeader}>Have kids?</p>
@@ -197,7 +223,7 @@ export default function Programs() {
                 </span>
                 <span>
                     <p className={styles.expandedHeader}>Monthly Rent</p>
-                    <p>{row.original.monthlyRent}</p>
+                    <p>$ {row.original.monthlyRent}</p>
                 </span>
                 <span>
                     <p className={styles.expandedHeader}>Graduation Date</p>
@@ -218,7 +244,6 @@ export default function Programs() {
 
     useEffect(() => {
         const getProgramById = async () => {
-            console.log('router.query.programID', router.query.programID)
             let config = {
                 method: 'get',
                 url: `${process.env.NEXT_PUBLIC_API_URL}/program/${router.query.programID}`,
@@ -227,9 +252,7 @@ export default function Programs() {
     
             await axios(config)
                 .then((response) => {
-                    console.log('response.data', response.data)
                     setProgram(response.data);
-                    // setIsLoading(false);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -245,11 +268,12 @@ export default function Programs() {
     
             await axios(config)
                 .then((response) => {
-                    console.log('response.data', response.data)
                     setProgramHouseholds(response.data);
                     setIsLoading(false);
                 })
                 .catch((error) => {
+                    setProgramHouseholds([]);
+                    setIsLoading(false);
                     console.log(error);
                 });
         }
@@ -262,7 +286,6 @@ export default function Programs() {
     }, [router.isReady, token]);
 
     const editProgram = async () => {
-        console.log('editProgram', program)
         let config = {
             method: 'put',
             url: `${process.env.NEXT_PUBLIC_API_URL}/program`,
@@ -274,10 +297,17 @@ export default function Programs() {
             .then((response) => {
                 setShowEditProgramModal(false);
                 setProgram(programEdit);
+                setErrorMessage('')
             })
             .catch((error) => {
                 console.log(error);
+                setErrorMessage('Unable to save. Try again.')
             });
+    }
+
+    const handleFormChange = (event) => {
+        let fieldName = event.target.id;
+        setHouseholdForm({...householdForm , [fieldName]: event.target.value})
     }
 
     const handleEditFormChange = (event, toEdit, setToEdit) => {
@@ -285,14 +315,42 @@ export default function Programs() {
         setToEdit({...toEdit , [fieldName]: event.target.value})
     }
 
+    const handleHouseholdCreated = async (event) => {
+	    event.preventDefault();
+
+        let tempHouseholdForm = householdForm;
+        tempHouseholdForm.fk_Partner_partnerID = user.partnerID;
+        tempHouseholdForm.fk_Program_programID = router.query.programID;
+
+        let config = {
+            method: 'post',
+            url: `${process.env.NEXT_PUBLIC_API_URL}/household`,
+            headers: { Authorization: `Bearer ${token}` },
+            data: tempHouseholdForm
+        };
+
+        await axios(config)
+            .then((response) => {
+                setProgramHouseholds([...programHouseholds, householdForm]);
+                setShowCreateHouseholdModal(false);
+                setHouseholdForm(initialFormState);
+                setErrorMessage('');
+            })
+            .catch((error) => {
+                console.log(error);
+                if (error?.response?.data?.sqlMessage?.includes('FOREIGN KEY (`fk_User_email`)')) {
+                    setErrorMessage("Specified Household Email doesn't exist in database. Need to create household user with this email or specify an existing user email.")
+                }
+            });
+  	};
+
     const handleProgramEdited = (event) => {
 	    event.preventDefault();
         editProgram(programEdit)
   	};
 
-      const handleHouseholdEdited = async (event) => {
+    const handleHouseholdEdited = async (event) => {
 	    event.preventDefault();
-        console.log('handleHouseholdEdited', householdToEdit)
         let config = {
             method: 'put',
             url: `${process.env.NEXT_PUBLIC_API_URL}/household`,
@@ -304,15 +362,15 @@ export default function Programs() {
             .then((response) => {
                 let tempHouseholds = [...programHouseholds];
                 let index = tempHouseholds.findIndex((obj) =>  obj.householdIntakeID === householdToEdit.householdIntakeID)
-                console.log('tempHouseholds before', tempHouseholds[index])
                 tempHouseholds[index] = householdToEdit;
-                console.log('tempHouseholds after', tempHouseholds[index])
                 setProgramHouseholds(tempHouseholds);
                 setShowEditHouseholdModal(false);
                 setHouseholdToEdit({});
+                setErrorMessage('');
             })
             .catch((error) => {
                 console.log(error);
+                setErrorMessage('Unable to save. Try again.')
             });
   	};
     
@@ -329,15 +387,7 @@ export default function Programs() {
     }, [isAuthenticated, user]);
 
     function formatDateForInput(str) {
-        let date = new Date(str);
-        var yyyy = date.getFullYear().toString();
-        var mm = (date.getMonth()+1).toString();
-        var dd  = date.getDate().toString();
-
-        var mmChars = mm.split('');
-        var ddChars = dd.split('');
-
-        return yyyy + '-' + (mmChars[1]?mm:"0"+mmChars[0]) + '-' + (ddChars[1]?dd:"0"+ddChars[0]);
+        return str?.split('T')[0];
     }
 
     function filterTable(arr, searchKey) {
@@ -442,10 +492,13 @@ export default function Programs() {
                         <p>{program?.req6}</p>
                     </span>
                 </div>
-                <div className={styles.tableSearch}>
-                    <input type="search" id="site-search" name="q" value={tableSearchTerm} onChange={(e) => setTableSearchTerm(e.target.value)} onKeyDown={handleKeyDown} />
-                    <button onClick={() => handleSearch()}><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                    <button onClick={() => handleClearSearch()}>Clear</button>
+                <div className={styles.tableActions}>
+                    <div className={styles.tableSearch}>
+                        <input type="search" id="site-search" name="q" value={tableSearchTerm} onChange={(e) => setTableSearchTerm(e.target.value)} onKeyDown={handleKeyDown} />
+                        <button onClick={() => handleSearch()}><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+                        <button onClick={() => handleClearSearch()}>Clear</button>
+                    </div>
+                    <button className={styles.addHousehold} onClick={() => setShowCreateHouseholdModal(true)}>Add Household</button>
                 </div>
                 <Table
                     tableColumns={columns}
@@ -582,7 +635,7 @@ export default function Programs() {
                             onChange={(e) => handleEditFormChange(e, programEdit, setProgramEdit)}
                             required
                         />
-                        {errorMessage && <p>{errorMessage}</p>}
+                        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
                         <button type="submit">Save</button>
                     </form>
                 </Modal>
@@ -703,7 +756,7 @@ export default function Programs() {
                         />
                         <label htmlFor="monthlyIncome">Monthly Income</label>
                         <input
-                            type="text"
+                            type="number"
                             id="monthlyIncome"
                             name="monthlyIncome"
                             value={householdToEdit?.monthlyIncome}
@@ -721,7 +774,7 @@ export default function Programs() {
                         />
                         <label htmlFor="adultCount"># of Adults</label>
                         <input
-                            type="text"
+                            type="number"
                             id="adultCount"
                             name="adultCount"
                             value={householdToEdit?.adultCount}
@@ -730,7 +783,7 @@ export default function Programs() {
                         />
                         <label htmlFor="kidsCount"># of Kids</label>
                         <input
-                            type="text"
+                            type="number"
                             id="kidsCount"
                             name="kidsCount"
                             value={householdToEdit?.kidsCount}
@@ -811,7 +864,7 @@ export default function Programs() {
                         />
                         <label htmlFor="monthlyRent">Monthly Rent</label>
                         <input
-                            type="text"
+                            type="number"
                             id="monthlyRent"
                             name="monthlyRent"
                             value={householdToEdit?.monthlyRent}
@@ -845,7 +898,279 @@ export default function Programs() {
                             onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
                         />
-                        {errorMessage && <p>{errorMessage}</p>}
+                        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+                        <button type="submit">Save</button>
+                    </form>
+                </Modal>
+
+                <Modal 
+                    isOpen={showCreateHouseholdModal}
+                    header='Add Household'
+                    handleClose={() => {setShowCreateHouseholdModal(false); setHouseholdForm({});}}
+                >
+                    <form className={styles.programForm} onSubmit={handleHouseholdCreated}>
+                        <label htmlFor="partnerStaffName">Team Member</label>
+                        <input
+                            type="text"
+                            id="partnerStaffName"
+                            name="partnerStaffName"
+                            value={householdForm?.partnerStaffName}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="fk_User_email">Household Email</label>
+                        <input
+                            type="email"
+                            id="fk_User_email"
+                            name="fk_User_email"
+                            value={householdForm?.fk_User_email}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="householdName">Household Name</label>
+                        <input
+                            type="text"
+                            id="householdName"
+                            name="householdName"
+                            value={householdForm?.householdName}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="enrollmentDate">Enrollment Date</label>
+                        <input
+                            type="date"
+                            id="enrollmentDate"
+                            name="enrollmentDate"
+                            value={householdForm?.enrollmentDate}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="locationEntry">Location at Entry</label>
+                        <input
+                            type="text"
+                            id="locationEntry"
+                            name="locationEntry"
+                            value={householdForm?.locationEntry}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="motelName">Motel Name</label>
+                        <input
+                            type="text"
+                            id="motelName"
+                            name="motelName"
+                            value={householdForm?.motelName}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="motelAddress">Motel Address</label>
+                        <input
+                            type="text"
+                            id="motelAddress"
+                            name="motelAddress"
+                            value={householdForm?.motelAddress}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="motelZip">Motel Zipcode</label>
+                        <input
+                            type="text"
+                            id="motelZip"
+                            name="motelZip"
+                            value={householdForm?.motelZip}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="educationStatus">Education</label>
+                        <input
+                            type="text"
+                            id="educationStatus"
+                            name="educationStatus"
+                            value={householdForm?.educationStatus}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="employmentType">Employment Type</label>
+                        <input
+                            type="text"
+                            id="employmentType"
+                            name="employmentType"
+                            value={householdForm?.employmentType}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="militaryStatus">Military Service</label>
+                        <input
+                            type="text"
+                            id="militaryStatus"
+                            name="militaryStatus"
+                            value={householdForm?.militaryStatus}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="maritalStatus">Marital Status</label>
+                        <input
+                            type="text"
+                            id="maritalStatus"
+                            name="maritalStatus"
+                            value={householdForm?.maritalStatus}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="incomeSource">Income Source</label>
+                        <input
+                            type="text"
+                            id="incomeSource"
+                            name="incomeSource"
+                            value={householdForm?.incomeSource}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="monthlyIncome">Monthly Income</label>
+                        <input
+                            type="number"
+                            id="monthlyIncome"
+                            name="monthlyIncome"
+                            value={householdForm?.monthlyIncome}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="haveKids">Have kids?</label>
+                        <input
+                            type="text"
+                            id="haveKids"
+                            name="haveKids"
+                            value={householdForm?.haveKids}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="adultCount"># of Adults</label>
+                        <input
+                            type="number"
+                            id="adultCount"
+                            name="adultCount"
+                            value={householdForm?.adultCount}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="kidsCount"># of Kids</label>
+                        <input
+                            type="number"
+                            id="kidsCount"
+                            name="kidsCount"
+                            value={householdForm?.kidsCount}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="adultNameAge">Adult(s) Name/Age</label>
+                        <input
+                            type="text"
+                            id="adultNameAge"
+                            name="adultNameAge"
+                            value={householdForm?.adultNameAge}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="kidsNameAge">Kid(s) Name/Age</label>
+                        <input
+                            type="text"
+                            id="kidsNameAge"
+                            name="kidsNameAge"
+                            value={householdForm?.kidsNameAge}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="prehousingDT">Pre-House Date</label>
+                        <input
+                            type="date"
+                            id="prehousingDT"
+                            name="prehousingDT"
+                            value={householdForm?.prehousingDT}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="apartmentLandlordName">Apartment Name/Landlord</label>
+                        <input
+                            type="text"
+                            id="apartmentLandlordName"
+                            name="apartmentLandlordName"
+                            value={householdForm?.apartmentLandlordName}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="prehousingAddress">Pre-House Address</label>
+                        <input
+                            type="text"
+                            id="prehousingAddress"
+                            name="prehousingAddress"
+                            value={householdForm?.prehousingAddress}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="prehouseCity">Pre-House City</label>
+                        <input
+                            type="text"
+                            id="prehouseCity"
+                            name="prehouseCity"
+                            value={householdForm?.prehouseCity}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="prehoseZip">Pre-House Zipcode</label>
+                        <input
+                            type="text"
+                            id="prehoseZip"
+                            name="prehoseZip"
+                            value={householdForm?.prehoseZip}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="preHouseCounty">Pre-House County</label>
+                        <input
+                            type="text"
+                            id="preHouseCounty"
+                            name="preHouseCounty"
+                            value={householdForm?.preHouseCounty}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="monthlyRent">Monthly Rent</label>
+                        <input
+                            type="number"
+                            id="monthlyRent"
+                            name="monthlyRent"
+                            value={householdForm?.monthlyRent}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="graduationDT">Graduation Date</label>
+                        <input
+                            type="date"
+                            id="graduationDT"
+                            name="graduationDT"
+                            value={householdForm?.graduationDT}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="sureImpactStatus">Sure Impact Status</label>
+                        <input
+                            type="text"
+                            id="sureImpactStatus"
+                            name="sureImpactStatus"
+                            value={householdForm?.sureImpactStatus}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        <label htmlFor="sureImpactNotes">Sure Impact Status</label>
+                        <input
+                            type="text"
+                            id="sureImpactNotes"
+                            name="sureImpactNotes"
+                            value={householdForm?.sureImpactNotes}
+                            onChange={(e) => handleFormChange(e, householdForm)}
+                            required
+                        />
+                        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
                         <button type="submit">Save</button>
                     </form>
                 </Modal>
