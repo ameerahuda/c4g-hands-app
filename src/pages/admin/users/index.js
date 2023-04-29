@@ -19,7 +19,7 @@ const initialFormState = {
     gender: '',
     race: '',
     phoneNumber: '',
-    partnerID:'none'
+    partnerID:''
 }
 
 export default function Users() {
@@ -75,7 +75,6 @@ export default function Users() {
 
         await axios(config)
             .then((response) => {
-                setUsers([...users, user])
                 setUserCreated(true);
                 setUserForm(initialFormState);
             })
@@ -108,8 +107,6 @@ export default function Users() {
         } else if (userForm.phoneNumber.length === 0) {
             valid = false;
         } else if (userForm.user_type.length === 0) {
-            valid = false;
-        } else if (userForm.partnerID.length === 0) {
             valid = false;
         }
 
@@ -147,7 +144,7 @@ export default function Users() {
                     <form className={styles.userForm} onSubmit={handleUserCreated}>
                         <label htmlFor="email">Email Address</label>
                         <input
-                            type="text"
+                            type="email"
                             id="email"
                             name="email"
                             value={userForm.email}
@@ -183,6 +180,7 @@ export default function Users() {
                             onChange={handleFormChange}
                             required
                         >
+                        	<option value="" disabled selected>Select...</option>
                             <option value="M">Male</option>
                             <option value="F">Female</option>
                             <option value="O">Other</option>
@@ -216,23 +214,29 @@ export default function Users() {
                             onChange={handleFormChange}
                             required
                         >
+                        	<option value="" disabled selected>Select...</option>
                             <option value="UnitedWay Staff">UnitedWay Staff</option>
                             <option value="Partner Staff">Partner Staff</option>
                             <option value="Household">Household</option>
                         </select>
 
-                        <label htmlFor="partnerID">Partner</label>
-                        <select
-                            id="partnerID"
-                            name="partnerID"
-                            value={userForm.partnerID}
-                            onChange={handleFormChange}
-                        >
-			<option value="None">United Way</option>
-                          {partners.map((partner, index) => (
-                            <option key={index} value={partner.partnerID}>{partner.partnerName}</option>
-                         ))}
-                        </select>
+                        {userForm.user_type === 'Partner Staff' &&
+                            <>
+                            <label htmlFor="partnerID">Partner</label>
+                        	<select
+                        	    id="partnerID"
+                        	    name="partnerID"
+                        	    value={userForm.partnerID}
+                        	    onChange={handleFormChange}
+                        	>
+							  <option value="" disabled selected>Select...</option>
+							  <option value="None">United Way</option>
+                        	  {partners.map((partner, index) => (
+                        	    <option key={index} value={partner.partnerID}>{partner.partnerName}</option>
+                        	 ))}
+                        	</select>
+                        </>
+						}
 
                         {errorMessage && <p>{errorMessage}</p>}
                         <button type="submit">Save</button>
