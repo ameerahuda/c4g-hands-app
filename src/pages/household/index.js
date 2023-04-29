@@ -220,6 +220,8 @@ export default function Household() {
                     </div>
                 </Accordion>
 
+                <div className={styles.sectionBreak}></div>
+
                 <Accordion
                     header='Household Journey Details'
                 >
@@ -321,58 +323,64 @@ export default function Household() {
                     : <p>No details</p>}
                 </Accordion> 
 
+                <div className={styles.sectionBreak}></div>
+
                 {journeyID &&
-                    <Accordion
-                        header='Household Journey by Months'
-                    >
-                        {journeyID ? 
-                            journeyMonths.map((item, index) => {
-                                return <div key={index} className={styles.householdContainer}>
-                                    <span className={styles.householdContainerHeader}>
-                                        <p className={styles.containerHeader}>Month {item?.month}</p>
-                                    </span>
-                                    <span>
-                                        <p className={styles.containerHeader}>Subsidy Date</p>
-                                        <p>{formatDate(item?.subsidyDT)}</p>
-                                    </span>
-                                    <span>
-                                        <p className={styles.containerHeader}>Subsidy Amount</p>
-                                        <p>$ {item?.subsidyAmt}</p>
-                                    </span>
-                                    <span>
-                                        <p className={styles.containerHeader}>1-on-1 Date</p>
-                                        <p>{formatDate(item?.oneoOnoneDT)}</p>
-                                    </span>
-                                    <span>
-                                        <p className={styles.containerHeader}>Saved Amount</p>
-                                        <p>$ {item?.savedAmt}</p>
-                                    </span>
-                                    <span>
-                                        <p className={styles.containerHeader}>Eviction Amount</p>
-                                        <p>$ {item?.evictionAmt}</p>
-                                    </span>
-                                    <span>
-                                        <p className={styles.containerHeader}>Debt Paid Amount</p>
-                                        <p>$ {item?.debtPaid}</p>
-                                    </span>
-                                    <span>
-                                        <p className={styles.containerHeader}>Apartment Application</p>
-                                        <p>{item?.apartmentApplication}</p>
-                                    </span>
-                                    <span>
-                                        <p className={styles.containerHeader}>Credit Score</p>
-                                        <p>{item?.creditScore}</p>
-                                    </span>
-                                    <span>
-                                        <p className={styles.containerHeader}>Total Spent</p>
-                                        <p>$ {item?.totalSpent}</p>
-                                    </span>
-                                </div>
-                            })
-                            : <p>No details</p>
-                        }
-                    </Accordion> 
+                    <>
+                        <Accordion
+                            header='Household Journey by Months'
+                        >
+                            {journeyID ? 
+                                journeyMonths.map((item, index) => {
+                                    return <div key={index} className={styles.householdContainer}>
+                                        <span className={styles.householdContainerHeader}>
+                                            <p className={styles.containerHeader}>Month {item?.month}</p>
+                                        </span>
+                                        <span>
+                                            <p className={styles.containerHeader}>Subsidy Date</p>
+                                            <p>{formatDate(item?.subsidyDT)}</p>
+                                        </span>
+                                        <span>
+                                            <p className={styles.containerHeader}>Subsidy Amount</p>
+                                            <p>$ {item?.subsidyAmt}</p>
+                                        </span>
+                                        <span>
+                                            <p className={styles.containerHeader}>1-on-1 Date</p>
+                                            <p>{formatDate(item?.oneoOnoneDT)}</p>
+                                        </span>
+                                        <span>
+                                            <p className={styles.containerHeader}>Saved Amount</p>
+                                            <p>$ {item?.savedAmt}</p>
+                                        </span>
+                                        <span>
+                                            <p className={styles.containerHeader}>Eviction Amount</p>
+                                            <p>$ {item?.evictionAmt}</p>
+                                        </span>
+                                        <span>
+                                            <p className={styles.containerHeader}>Debt Paid Amount</p>
+                                            <p>$ {item?.debtPaid}</p>
+                                        </span>
+                                        <span>
+                                            <p className={styles.containerHeader}>Apartment Application</p>
+                                            <p>{item?.apartmentApplication}</p>
+                                        </span>
+                                        <span>
+                                            <p className={styles.containerHeader}>Credit Score</p>
+                                            <p>{item?.creditScore}</p>
+                                        </span>
+                                        <span>
+                                            <p className={styles.containerHeader}>Total Spent</p>
+                                            <p>$ {item?.totalSpent}</p>
+                                        </span>
+                                    </div>
+                                })
+                                : <p>No details</p>
+                            }
+                        </Accordion> 
+                        <div className={styles.sectionBreak}></div>
+                    </>
                 }
+
             </main>
         </>
     )

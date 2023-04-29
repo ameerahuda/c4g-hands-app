@@ -10,6 +10,10 @@
     margin-top: 6rem;
 }
 
+.sectionBreak {
+    margin-bottom: 2rem;
+}
+
 .householdHeader {
     display: flex;
     justify-content: space-between;
