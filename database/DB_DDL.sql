@@ -12,31 +12,33 @@ use c4g_hands_db;
 
 CREATE TABLE User
 (
-    email       varchar(50) NOT NULL,
-    password    varchar(50) NOT NULL,
-    first_name  varchar(50) NOT NULL,
-    last_name   varchar(50) NOT NULL,
-    user_type   varchar(20) NOT NULL,
-    birthdate   date        NOT NULL,
-    gender      char(1)     NOT NULL,
-    race        char(1)     NOT NULL,
-    phoneNumber varchar(10) NOT NULL,
-    partnerID   varchar(10),
-    createdAt   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    createdBy   varchar(50),
+    email        varchar(50) NOT NULL,
+    password     varchar(50) NOT NULL,
+    first_name   varchar(50) NOT NULL,
+    last_name    varchar(50) NOT NULL,
+    user_type    varchar(20) NOT NULL,
+    birthdate    date        NOT NULL,
+    gender       char(1)     NOT NULL,
+    race         char(1)     NOT NULL,
+    phoneNumber  varchar(10) NOT NULL,
+    partnerID    varchar(10),
+    createdAt    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    createdBy    varchar(50),
+    needResetPwd char(1)   DEFAULT 'F',
 
     PRIMARY KEY (email)
 );
 
 CREATE TABLE Partner
 (
-    partnerID           varchar(10) NOT NULL,
-    partnerName         varchar(50) NOT NULL,
-    partnerAddress      varchar(100) NOT NULL,
-    partnerSocialHandle varchar(50) NOT NULL,
-    partnerBudget       DECIMAL(13, 2)  NOT NULL,
+    partnerID           varchar(10)    NOT NULL,
+    partnerName         varchar(50)    NOT NULL,
+    partnerAddress      varchar(100)   NOT NULL,
+    partnerSocialHandle varchar(50)    NOT NULL,
+    partnerBudget       DECIMAL(13, 2) NOT NULL,
     createdAt           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     createdBy           varchar(50),
+    homePage            varchar(50),
 
     PRIMARY KEY (partnerID)
 );
