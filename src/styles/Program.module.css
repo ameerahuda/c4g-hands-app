@@ -116,6 +116,14 @@
     padding: 0.5rem;
 }
 
+.programForm select {
+    margin-bottom: 1rem;
+    border: 1px solid grey;
+    background: none;
+    outline: none;
+    padding: 0.5rem;
+}
+
 .programForm button {
     text-align: center;
     text-transform: uppercase;
