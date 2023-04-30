@@ -54,6 +54,25 @@ export default function Home() {
 							className={styles.infoImg}
 						/>
 					</span>
+
+						
+				</div>
+				<div className={styles.documentation}>
+					<p className={styles.infoTitle}>User Manual</p>
+					<span className={styles.documentationLinks}>
+						<a
+							href="/files/P3_HandS_UserDocumentation.pdf"
+							alt="alt text"
+							target="_blank"
+							rel="noopener noreferrer"
+						>P3_HandS_UserDocumentation.pdf</a>
+						<a
+							href="/files/P3_HandS_UserDocumentation.docx"
+							alt="alt text"
+							target="_blank"
+							rel="noopener noreferrer"
+						>P3_HandS_UserDocumentation.docx</a>
+					</span>
 				</div>
 			</main>
 		</>
