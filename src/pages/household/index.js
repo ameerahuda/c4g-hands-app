@@ -61,7 +61,7 @@ export default function Household() {
                 });
         }
 
-        if (token) {
+        if (token && router.isReady) {
             getHouseholdIntake();
             getHouseholdJourney();
         }

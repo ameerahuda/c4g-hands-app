@@ -509,7 +509,7 @@ export default function Programs() {
                 <Modal 
                     isOpen={showEditProgramModal}
                     header='Edit Program'
-                    handleClose={() => {setShowEditProgramModal(false)}}
+                    handleClose={() => {setShowEditProgramModal(false); setProgramEdit({})}}
                 >
                     <form className={styles.programForm} onSubmit={handleProgramEdited}>
                         <label htmlFor="programName">Program Name</label>
@@ -881,17 +881,29 @@ export default function Programs() {
                             required
                         />
                         <label htmlFor="sureImpactStatus">Sure Impact Status</label>
-                        <input
+                        {/* <input
                             type="text"
                             id="sureImpactStatus"
                             name="sureImpactStatus"
                             value={householdToEdit?.sureImpactStatus}
                             onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
                             required
-                        />
-                        <label htmlFor="sureImpactNotes">Sure Impact Status</label>
-                        <input
-                            type="text"
+                        /> */}
+                        <select
+                            id='sureImpactStatus'
+                            name='sureImpactStatus'
+                            value={householdToEdit?.sureImpactStatus}
+                            onChange={(e) => handleEditFormChange(e, householdToEdit, setHouseholdToEdit)}
+                            required
+                        >
+                        	<option value='' disabled selected>Select...</option>
+                            <option value='Completed'>Completed</option>
+                            <option value='Dropped'>Dropped</option>
+                            <option value='In Progress'>In Progress</option>
+                            <option value='Inactive'>Inactive</option>
+                        </select>
+                        <label htmlFor="sureImpactNotes">Sure Impact Notes</label>
+                        <textarea
                             id="sureImpactNotes"
                             name="sureImpactNotes"
                             value={householdToEdit?.sureImpactNotes}
@@ -906,7 +918,7 @@ export default function Programs() {
                 <Modal 
                     isOpen={showCreateHouseholdModal}
                     header='Add Household'
-                    handleClose={() => {setShowCreateHouseholdModal(false); setHouseholdForm({});}}
+                    handleClose={() => {setShowCreateHouseholdModal(false); setHouseholdForm(initialFormState);}}
                 >
                     <form className={styles.programForm} onSubmit={handleHouseholdCreated}>
                         <label htmlFor="partnerStaffName">Team Member</label>
@@ -1153,17 +1165,21 @@ export default function Programs() {
                             required
                         />
                         <label htmlFor="sureImpactStatus">Sure Impact Status</label>
-                        <input
-                            type="text"
-                            id="sureImpactStatus"
-                            name="sureImpactStatus"
+                        <select
+                            id='sureImpactStatus'
+                            name='sureImpactStatus'
                             value={householdForm?.sureImpactStatus}
                             onChange={(e) => handleFormChange(e, householdForm)}
                             required
-                        />
-                        <label htmlFor="sureImpactNotes">Sure Impact Status</label>
-                        <input
-                            type="text"
+                        >
+                        	<option value='' disabled selected>Select...</option>
+                            <option value='Completed'>Completed</option>
+                            <option value='Dropped'>Dropped</option>
+                            <option value='In Progress'>In Progress</option>
+                            <option value='Inactive'>Inactive</option>
+                        </select>
+                        <label htmlFor="sureImpactNotes">Sure Impact Notes</label>
+                        <textarea
                             id="sureImpactNotes"
                             name="sureImpactNotes"
                             value={householdForm?.sureImpactNotes}

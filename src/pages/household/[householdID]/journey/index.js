@@ -68,7 +68,8 @@ export default function Journey() {
     const [errorMessage, setErrorMessage] = useState('');
 
     const formatDate = (strDate) => {
-        let date = new Date(strDate);
+        let tempStrDate = strDate?.includes('T') ? strDate : strDate + 'T00:00-0800';
+        let date = new Date(tempStrDate);
         return date.toLocaleString().split(',')[0];
     }
 
@@ -76,16 +77,34 @@ export default function Journey() {
         return str?.split('T')[0];
     }
 
+    const getHouseholdJourney = async () => {
+        let config = {
+            method: 'get',
+            url: `${process.env.NEXT_PUBLIC_API_URL}/journey?email=${householdIntake?.fk_User_email}`,
+            headers: { Authorization: `Bearer ${token}` }
+        };
+
+        await axios(config)
+            .then((response) => {
+                setJourneyDetails(response.data[0]);
+                setJourneyID(response.data[0].journeyID);
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                console.log(error);
+            });
+    }
+
     useEffect(() => {
         const getHouseholdIntake = async () => {
             let config = {
                 method: 'get',
-                url: `${process.env.NEXT_PUBLIC_API_URL}/household?email=${JSON.parse(router.query.household).fk_User_email}`,
+                url: `${process.env.NEXT_PUBLIC_API_URL}/household/${router.query.householdID}`,
                 headers: { Authorization: `Bearer ${token}` }
             };
     
             await axios(config)
-                .then((response) => {
+                .then(async (response) => {
                     setHouseholdIntake(response.data);
                 })
                 .catch((error) => {
@@ -94,30 +113,20 @@ export default function Journey() {
                 });
         }
 
-        const getHouseholdJourney = async () => {
-            let config = {
-                method: 'get',
-                url: `${process.env.NEXT_PUBLIC_API_URL}/journey?email=${JSON.parse(router.query.household).fk_User_email}`,
-                headers: { Authorization: `Bearer ${token}` }
-            };
-    
-            await axios(config)
-                .then((response) => {
-                    setJourneyDetails(response.data[0]);
-                    setJourneyID(response.data[0].journeyID);
-                })
-                .catch((error) => {
-                    setIsLoading(false);
-                    console.log(error);
-                });
-        }
-
-        if (token) {
-            getHouseholdIntake();
-            getHouseholdJourney();
+        if (token && router.isReady) {
+            if (router.query.householdID && !householdIntake) {
+                getHouseholdIntake();
+            }
         }
 
     }, [router.isReady, token]);
+
+    useEffect(() => {
+        if (householdIntake && (!journeyDetails || !journeyID)) {
+            getHouseholdJourney();
+        }
+
+    }, [householdIntake]);
 
     useEffect(() => {
         const getHouseholdJourneyMonths = async () => {
@@ -142,11 +151,12 @@ export default function Journey() {
         }
     }, [token, journeyID])
 
-    const handleUpdateJourney = async (updateType) => {
+    const handleUpdateJourney = async (e, updateType) => {
+        e.preventDefault();
         setIsLoading(true);
         let tempJourneyDetails = journeyForm;
-        tempJourneyDetails.fk_User_email = JSON.parse(router.query.household).fk_User_email;
-        tempJourneyDetails.fk_Program_programID = JSON.parse(router.query.household).fk_Program_programID;
+        tempJourneyDetails.fk_User_email = householdIntake.fk_User_email;
+        tempJourneyDetails.fk_Program_programID = householdIntake.fk_Program_programID;
 
         let config = {
             method: updateType === 'ADD' ? 'post' : 'put',
@@ -158,52 +168,72 @@ export default function Journey() {
         await axios(config)
             .then((response) => {
                 setIsLoading(false);
+                setJourneyID(response.data.journeyID);
                 setJourneyDetails(tempJourneyDetails);
                 setShowUpdateJourneyDetailsModal(false);
                 setErrorMessage('');
             })
             .catch((error) => {
                 console.log(error);
-                setErrorMessage('Unable to save. Try again.')
+                setErrorMessage('Unable to save. Try again.');
                 setIsLoading(false);
             });
         
     }
 
-    const handleUpdateJourneyMonth = async (updateType) => {
-        setIsLoading(true);
+    const handleUpdateJourneyMonth = async (e, updateType) => {
+        e.preventDefault();
         let tempJourneyMonth = journeyMonthForm;
-        tempJourneyMonth.journeyID = journeyID;
-        if (updateType === 'ADD') {
-            tempJourneyMonth.month = journeyMonths.length + 1;
-        }
-        let config = {
-            method: updateType === 'ADD' ? 'post' : 'put',
-            url: `${process.env.NEXT_PUBLIC_API_URL}/journey-month`,
-            headers: { Authorization: `Bearer ${token}` },
-            data: tempJourneyMonth
-        };
 
-        await axios(config)
-            .then((response) => {
-                setIsLoading(false);
-                if (updateType === 'ADD') {
-                    setJourneyMonths([...journeyMonths, tempJourneyMonth]);
-                } else {
-                    let tempJourneyMonths = journeyMonths;
-                    let index = tempJourneyMonths.findIndex((item) => item.month === tempJourneyMonth.month);
-                    tempJourneyMonths[index] = tempJourneyMonth;
-                    setJourneyMonths(tempJourneyMonths);
-                    setErrorMessage('');
-                }
-                setShowUpdateJourneyMonthModal(false);
-            })
-            .catch((error) => {
-                console.log(error);
-                setErrorMessage('Unable to save. Try again.')
-                setIsLoading(false);
-            });
-        
+        let valid = true;
+        if (journeyMonths.length > 0) {
+            if (tempJourneyMonth.subsidyDT < journeyMonths[journeyMonths.length-1].subsidyDT 
+                || new Date(tempJourneyMonth.subsidyDT).getMonth() <= new Date(journeyMonths[journeyMonths.length-1].subsidyDT).getMonth()) {
+                setErrorMessage('Unable to save. Subsidy Date must at least a month greater than Subsidy Date of previous month.');
+                valid = false;
+            } else setErrorMessage('');
+        } else {
+            if (tempJourneyMonth.subsidyDT < householdIntake.prehousingDT) {
+                setErrorMessage('Unable to save. Subsidy Date of first month must be greater than PreHousing Date.');
+                valid = false;
+            } else setErrorMessage('');
+        }
+
+        if (valid) {
+            let config = {
+                method: updateType === 'ADD' ? 'post' : 'put',
+                url: `${process.env.NEXT_PUBLIC_API_URL}/journey-month`,
+                headers: { Authorization: `Bearer ${token}` },
+                data: tempJourneyMonth
+            };
+
+            tempJourneyMonth.journeyID = journeyID;
+            if (updateType === 'ADD') {
+                tempJourneyMonth.month = journeyMonths.length + 1;
+            }
+
+            await axios(config)
+                .then(async (response) => {
+                    setIsLoading(false);
+                    if (updateType === 'ADD') {
+                        setJourneyMonths([...journeyMonths, tempJourneyMonth]);
+                    } else {
+                        let tempJourneyMonths = journeyMonths;
+                        let index = tempJourneyMonths.findIndex((item) => item.month === tempJourneyMonth.month);
+                        tempJourneyMonths[index] = tempJourneyMonth;
+                        setJourneyMonths(tempJourneyMonths);
+                        setErrorMessage('');
+                    }
+                    setShowUpdateJourneyMonthModal(false);
+                    setJourneyMonthForm(initialJourneyMonthForm);
+                    await getHouseholdJourney();
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setErrorMessage('Unable to save. Try again.')
+                    setIsLoading(false);
+                });
+        }
     }
 
     const handleFormChange = (event) => {
@@ -244,103 +274,103 @@ export default function Journey() {
                     <div className={styles.householdContainer}>
                         <span>
                             <p className={styles.containerHeader}>Location at Entry</p>
-                            <p>{householdIntake.locationEntry}</p>
+                            <p>{householdIntake?.locationEntry}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Motel Name</p>
-                            <p>{householdIntake.motelName}</p>
+                            <p>{householdIntake?.motelName}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Motel Address</p>
-                            <p>{householdIntake.motelAddress}</p>
+                            <p>{householdIntake?.motelAddress}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Motel Zipcode</p>
-                            <p>{householdIntake.motelZip}</p>
+                            <p>{householdIntake?.motelZip}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Education</p>
-                            <p>{householdIntake.educationStatus}</p>
+                            <p>{householdIntake?.educationStatus}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Employment Type</p>
-                            <p>{householdIntake.employmentType}</p>
+                            <p>{householdIntake?.employmentType}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Military Service</p>
-                            <p>{householdIntake.militaryStatus}</p>
+                            <p>{householdIntake?.militaryStatus}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Marital Status</p>
-                            <p>{householdIntake.maritalStatus}</p>
+                            <p>{householdIntake?.maritalStatus}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Income Source</p>
-                            <p>{householdIntake.incomeSource}</p>
+                            <p>{householdIntake?.incomeSource}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Monthly Income</p>
-                            <p>$ {householdIntake.monthlyIncome}</p>
+                            <p>$ {householdIntake?.monthlyIncome}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Have kids?</p>
-                            <p>{householdIntake.haveKids}</p>
+                            <p>{householdIntake?.haveKids}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}># of Adults</p>
-                            <p>{householdIntake.adultCount}</p>
+                            <p>{householdIntake?.adultCount}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}># of Kids</p>
-                            <p>{householdIntake.kidsCount}</p>
+                            <p>{householdIntake?.kidsCount}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Adult(s) Name/Age</p>
-                            <p>{householdIntake.adultNameAge}</p>
+                            <p>{householdIntake?.adultNameAge}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Kid(s) Name/Age</p>
-                            <p>{householdIntake.kidsNameAge}</p>
+                            <p>{householdIntake?.kidsNameAge}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Pre-House Date</p>
-                            <p>{formatDate(householdIntake.prehousingDT)}</p>
+                            <p>{formatDate(householdIntake?.prehousingDT)}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Apartment Name/Landlord</p>
-                            <p>{householdIntake.apartmentLandlordName}</p>
+                            <p>{householdIntake?.apartmentLandlordName}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Pre-House Address</p>
-                            <p>{householdIntake.prehousingAddress}</p>
+                            <p>{householdIntake?.prehousingAddress}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Pre-House City</p>
-                            <p>{householdIntake.prehouseCity}</p>
+                            <p>{householdIntake?.prehouseCity}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Pre-House Zipcode</p>
-                            <p>{householdIntake.prehoseZip}</p>
+                            <p>{householdIntake?.prehoseZip}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Pre-House County</p>
-                            <p>{householdIntake.preHouseCounty}</p>
+                            <p>{householdIntake?.preHouseCounty}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Monthly Rent</p>
-                            <p>$ {householdIntake.monthlyRent}</p>
+                            <p>$ {householdIntake?.monthlyRent}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Graduation Date</p>
-                            <p>{formatDate(householdIntake.graduationDT)}</p>
+                            <p>{formatDate(householdIntake?.graduationDT)}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Sure Impact Status</p>
-                            <p>{householdIntake.sureImpactStatus}</p>
+                            <p>{householdIntake?.sureImpactStatus}</p>
                         </span>
                         <span>
                             <p className={styles.containerHeader}>Sure Impact Notes</p>
-                            <p>{householdIntake.sureImpactNotes}</p>
+                            <p>{householdIntake?.sureImpactNotes}</p>
                         </span>
                     </div>
                 </Accordion> 
@@ -457,9 +487,10 @@ export default function Journey() {
                     handleClose={() => {
                         setShowUpdateJourneyDetailsModal(false); 
                         setJourneyForm(initialJourneyFormState);
+                        setErrorMessage('');
                     }}
                 >
-                    <form className={styles.journeyForm} onSubmit={() => handleUpdateJourney(journeyID ? 'EDIT' : 'ADD')}>
+                    <form className={styles.journeyForm} onSubmit={(e) => handleUpdateJourney(e, journeyID ? 'EDIT' : 'ADD')}>
                         <label htmlFor="maxAllowance">Max Allowance</label>
                         <input
                             type="number"
@@ -702,7 +733,7 @@ export default function Journey() {
                         <Accordion
                             header='Household Journey by Months'
                         >
-                            {journeyID ? 
+                            {journeyMonths.length > 0 ? 
                                 journeyMonths.map((item, index) => {
                                     return <div key={index} className={styles.householdContainer}>
                                         <span className={styles.householdContainerHeader}>
@@ -759,9 +790,10 @@ export default function Journey() {
                     handleClose={() => {
                         setShowUpdateJourneyMonthModal(false); 
                         setJourneyMonthForm(initialJourneyMonthForm);
+                        setErrorMessage('');
                     }}
                 >
-                    <form className={styles.journeyForm} onSubmit={() => handleUpdateJourneyMonth(journeyMonthForm?.month ? 'EDIT' : 'ADD')}>
+                    <form className={styles.journeyForm} onSubmit={(e) => handleUpdateJourneyMonth(e, journeyMonthForm?.month ? 'EDIT' : 'ADD')}>
                         {journeyMonthForm?.month && 
                             <>
                                 <label htmlFor="month">Month</label>
