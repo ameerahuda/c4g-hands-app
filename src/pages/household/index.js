@@ -19,6 +19,7 @@ export default function Household() {
     const [journeyID, setJourneyID] = useState();
     const [journeyDetails, setJourneyDetails] = useState({});
     const [journeyMonths, setJourneyMonths] = useState([]);
+    const [programDetails, setProgramDetails] = useState();
 
     const formatDate = (strDate) => {
         let date = new Date(strDate);
@@ -90,6 +91,28 @@ export default function Household() {
             getHouseholdJourneyMonths();
         }
     }, [token, journeyID]);
+
+    useEffect(() => {
+        const getProgramDetails = async () => {
+            let config = {
+                method: 'get',
+                url: `${process.env.NEXT_PUBLIC_API_URL}/program/${householdIntake.fk_Program_programID}`,
+                headers: { Authorization: `Bearer ${token}` }
+            };
+    
+            await axios(config)
+                .then((response) => {
+                    setProgramDetails(response.data);
+                })
+                .catch((error) => {
+                    setIsLoading(false);
+                    console.log(error);
+                });
+        }
+        if (token && householdIntake) {
+            getProgramDetails();
+        }
+    }, [token, householdIntake]);
 
     useEffect(() => {
         if (!isAuthenticated && !sessionStorage.getItem('user')) {
@@ -216,6 +239,39 @@ export default function Household() {
                         <span>
                             <p className={styles.containerHeader}>Sure Impact Notes</p>
                             <p>{householdIntake?.sureImpactNotes}</p>
+                        </span>
+                    </div>
+                </Accordion>
+
+                <div className={styles.sectionBreak}></div>
+
+                <Accordion
+                    header='Program Requirements'
+                >
+                    <div className={styles.householdContainer}>
+                        <span>
+                            <p className={styles.containerHeader}>Requirement 1</p>
+                            <p>{programDetails?.req1}</p>
+                        </span>
+                        <span>
+                            <p className={styles.containerHeader}>Requirement 2</p>
+                            <p>{programDetails?.req2}</p>
+                        </span>
+                        <span>
+                            <p className={styles.containerHeader}>Requirement 3</p>
+                            <p>{programDetails?.req3}</p>
+                        </span>
+                        <span>
+                            <p className={styles.containerHeader}>Requirement 4</p>
+                            <p>{programDetails?.req4}</p>
+                        </span>
+                        <span>
+                            <p className={styles.containerHeader}>Requirement 5</p>
+                            <p>{programDetails?.req5}</p>
+                        </span>
+                        <span>
+                            <p className={styles.containerHeader}>Requirement 6</p>
+                            <p>{programDetails?.req6}</p>
                         </span>
                     </div>
                 </Accordion>
